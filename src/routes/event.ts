@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {Event} from "../models/event/Event";
 import {validateCreateEventRequest, validateEventStatusRequest} from "../middleware/validators/event";
-import {EventCreatedResponse} from "../types/event";
+import {EventCreatedResponse, EventStatusResponse} from "../types/event";
 
 export async function createEvent(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -13,7 +13,6 @@ export async function createEvent(req: Request, res: Response, next: NextFunctio
             event: event
         }
         res.status(201).json(response);
-        
         return;
     } catch (err) {
         next(err);
@@ -21,15 +20,17 @@ export async function createEvent(req: Request, res: Response, next: NextFunctio
 }
 
 export async function getEventStatus(req: Request, res: Response, next: NextFunction) {
+    console.log("sdf")
     try {
         const eventStatusRequest = validateEventStatusRequest(req.params);
         const event = await Event.getById(eventStatusRequest.eventId);
-        const isSoldOut = await event.isSoldOut();
-        res.status(200).json({
-            message: 'Event status retrieved successfully',
-            isSoldOut
-        });
         
+        const response: EventStatusResponse = {
+            event: event,
+            ticketsAvailable: await event.getTicketsAvailableCount(),
+            waitingListCount: await event.getWaitingListCount()
+        }
+        res.status(200).json(response);
         return;
     } catch (err) {
         next(err);

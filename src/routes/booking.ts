@@ -39,7 +39,6 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
             ticket: ticket
         }
         res.status(201).json(response);
-        
         return;
     } catch (err) {
         next(err);

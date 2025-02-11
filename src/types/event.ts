@@ -18,3 +18,9 @@ export type EventStatusRequest = {
     eventId: string;
 }
 
+export type EventStatusResponse = {
+    event: Event;
+    ticketsAvailable: number;
+    waitingListCount: number;
+}
+

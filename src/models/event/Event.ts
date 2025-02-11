@@ -52,6 +52,27 @@ export class Event {
         await this.bumpWaitList();
     }
     
+    public async getTicketsAvailableCount(): Promise<number> {
+        const ticketsSold = await prisma.booking.count({
+            where: {
+                eventId: this.id,
+                status: BookingStatus.CONFIRMED,
+                deletedAt: null
+            }
+        });
+        return this.ticketLimit - ticketsSold;
+    }
+    
+    public async getWaitingListCount(): Promise<number> {
+        return prisma.booking.count({
+            where: {
+                eventId: this.id,
+                status: BookingStatus.PENDING,
+                deletedAt: null
+            }
+        });
+    }
+    
     public static async create(event: CreateEventRequest): Promise<Event> {
         event.date = new Date(event.date);
         const newEvent = await prisma.event.create({

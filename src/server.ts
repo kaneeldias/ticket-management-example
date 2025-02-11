@@ -12,7 +12,7 @@ app.use(express.json())
 app.post("/initialize", createEvent);
 app.post('/book',  createBooking);
 app.post('/cancel',  cancelBooking);
-app.get('status/:eventId', getEventStatus);
+app.get('/status/:eventId', getEventStatus);
 
 //Error handling middleware
 app.use(errorHandler);
