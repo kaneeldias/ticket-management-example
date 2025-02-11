@@ -1,0 +1,11 @@
+POST http://localhost:3000/initialize
+Content-Type: application/json
+
+{
+  "name": "Game Night",
+  "description": "A night of fun and games",
+  "date": "2021-12-31",
+  "location": "Colombo",
+  "ticketLimit": 100,
+  "price": 1000
+}
