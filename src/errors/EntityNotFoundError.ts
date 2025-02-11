@@ -1,6 +1,6 @@
 export class EntityNotFoundError extends Error {
     constructor(type: string, id: number) {
-        super(`${type} with id ${id} not found`);
-        this.name = 'EventNotFoundError';
+        super(`${type} with ID ${id} not found`);
+        this.name = "EventNotFoundError";
     }
 }

@@ -1,9 +1,9 @@
-import Joi from 'joi';
-import {CancelBookingRequest, CreateBookingRequest} from "../../types/booking";
+import Joi from "joi";
+import { CancelBookingRequest, CreateBookingRequest } from "../../types/booking";
 
 const createBookingSchema = Joi.object({
     eventId: Joi.string().required(),
-    userId: Joi.string().required()
+    userId: Joi.string().required(),
 });
 
 const cancelBookingSchema = Joi.object({

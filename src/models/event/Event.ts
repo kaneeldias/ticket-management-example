@@ -1,7 +1,8 @@
-import {BookingStatus, PrismaClient} from "@prisma/client";
-import {EventNotFoundError} from "../../errors/EventNotFoundError";
-import {Booking} from "../booking/Booking";
-import {CreateEventRequest} from "../../types/event";
+import { PrismaClient } from "@prisma/client";
+import { EventNotFoundError } from "../../errors/EventNotFoundError";
+import { Booking } from "../booking/Booking";
+import { CreateEventRequest } from "../../types/event";
+import { validateCreateEventRequest } from "../../middleware/validators/event";
 
 const prisma = new PrismaClient();
 
@@ -13,9 +14,16 @@ export class Event {
     private readonly location: string;
     private readonly ticketLimit: number;
     private readonly price: number;
-    
-    private constructor(id: number, name: string, description: string, date: Date, location: string,
-                        ticketLimit: number, price: number) {
+
+    private constructor(
+        id: number,
+        name: string,
+        description: string,
+        date: Date,
+        location: string,
+        ticketLimit: number,
+        price: number,
+    ) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -24,76 +32,91 @@ export class Event {
         this.ticketLimit = ticketLimit;
         this.price = price;
     }
-    
+
+    public static async create(event: CreateEventRequest): Promise<Event> {
+        event = validateCreateEventRequest(event);
+        event.date = new Date(event.date);
+        const newEvent = await prisma.event.create({
+            data: event,
+        });
+
+        return new Event(
+            newEvent.id,
+            newEvent.name,
+            newEvent.description,
+            newEvent.date,
+            newEvent.location,
+            newEvent.ticketLimit,
+            newEvent.price,
+        );
+    }
+
+    public static async getById(id: number): Promise<Event> {
+        const event = await prisma.event.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!event) {
+            throw new EventNotFoundError(id);
+        }
+        return new Event(
+            event.id,
+            event.name,
+            event.description,
+            event.date,
+            event.location,
+            event.ticketLimit,
+            event.price,
+        );
+    }
+
     public getId(): number {
         return this.id;
     }
-    
+
     public async isSoldOut(): Promise<boolean> {
         const ticketsSold = await prisma.booking.count({
             where: {
                 eventId: this.id,
-                status: BookingStatus.CONFIRMED,
-                deletedAt: null
-            }
-        })
+                status: "CONFIRMED",
+                deletedAt: null,
+            },
+        });
         return ticketsSold >= this.ticketLimit;
     }
-    
+
     public async bumpWaitList(): Promise<void> {
         if (await this.isSoldOut()) return;
-        
+
         const firstWaiting = await Booking.getFirstOnWaitList(this);
         if (!firstWaiting) return;
-        
+
         await firstWaiting.upgrade();
-        
+
         // Recursively call bumpWaitList() until the event is sold out or the wait list is empty
         await this.bumpWaitList();
     }
-    
+
     public async getTicketsAvailableCount(): Promise<number> {
         const ticketsSold = await prisma.booking.count({
             where: {
                 eventId: this.id,
-                status: BookingStatus.CONFIRMED,
-                deletedAt: null
-            }
+                status: "CONFIRMED",
+                deletedAt: null,
+            },
         });
         return this.ticketLimit - ticketsSold;
     }
-    
+
     public async getWaitingListCount(): Promise<number> {
         return prisma.booking.count({
             where: {
                 eventId: this.id,
-                status: BookingStatus.PENDING,
-                deletedAt: null
-            }
+                status: "PENDING",
+                deletedAt: null,
+            },
         });
-    }
-    
-    public static async create(event: CreateEventRequest): Promise<Event> {
-        event.date = new Date(event.date);
-        const newEvent = await prisma.event.create({
-            data: event
-        });
-        
-        return new Event(newEvent.id, newEvent.name, newEvent.description, newEvent.date, newEvent.location,
-            newEvent.ticketLimit, newEvent.price);
-    }
-    
-    public static async getById(id: number): Promise<Event> {
-        const event = await prisma.event.findUnique({
-            where: {
-                id
-            }
-        });
-        
-        if (!event) {
-            throw new EventNotFoundError(id);
-        }
-        return new Event(event.id, event.name, event.description, event.date, event.location, event.ticketLimit,
-            event.price);
     }
 }

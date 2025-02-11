@@ -1,4 +1,4 @@
-import {Event} from "../models/event/Event";
+import { Event } from "../models/event/Event";
 
 export type CreateEventRequest = {
     name: string;
@@ -7,20 +7,19 @@ export type CreateEventRequest = {
     location: string;
     ticketLimit: number;
     price: number;
-}
+};
 
 export type EventCreatedResponse = {
     message: string;
     event: Event;
-}
+};
 
 export type EventStatusRequest = {
     eventId: number;
-}
+};
 
 export type EventStatusResponse = {
     event: Event;
     ticketsAvailable: number;
     waitingListCount: number;
-}
-
+};

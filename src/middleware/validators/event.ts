@@ -1,5 +1,5 @@
 import Joi from "joi";
-import {CreateEventRequest, EventStatusRequest} from "../../types/event";
+import { CreateEventRequest, EventStatusRequest } from "../../types/event";
 
 const createEventSchema = Joi.object({
     name: Joi.string().required(),
@@ -7,11 +7,11 @@ const createEventSchema = Joi.object({
     date: Joi.date().required(),
     location: Joi.string().required(),
     ticketLimit: Joi.number().integer().min(1).required(),
-    price: Joi.number().positive().required()
+    price: Joi.number().positive().required(),
 });
 
 const eventStatusSchema = Joi.object({
-    eventId: Joi.number().integer().required()
+    eventId: Joi.number().integer().required(),
 });
 
 export function validateCreateEventRequest(event: any): CreateEventRequest {
