@@ -136,4 +136,12 @@ describe("Booking model tests", () => {
         await expect(booking.upgrade()).rejects.toThrow(BookingAlreadyConfirmedError);
         await expect(booking.upgrade()).rejects.toThrow("Booking with ID 1 has already been confirmed");
     });
+
+    test("Upgrade booking but already cancelled", async () => {
+        mockPrisma.booking.findUnique.mockResolvedValue(CANCELLED_BOOKING_1);
+
+        const booking = await Booking.getById(1);
+        await expect(booking.upgrade()).rejects.toThrow(BookingAlreadyCancelledError);
+        await expect(booking.upgrade()).rejects.toThrow("Booking with ID 1 has already been cancelled");
+    });
 });

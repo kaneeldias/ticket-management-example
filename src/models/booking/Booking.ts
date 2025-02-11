@@ -114,6 +114,10 @@ export class Booking {
             throw new BookingAlreadyConfirmedError(this.id);
         }
 
+        if (this.status === "CANCELLED") {
+            throw new BookingAlreadyCancelledError(this.id);
+        }
+
         const updatedTicket = await prisma.booking.update({
             where: {
                 id: this.id,

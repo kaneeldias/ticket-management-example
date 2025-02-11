@@ -1,5 +1,5 @@
 import { MockPrismaClient, prisma } from "../__mocks__/prisma";
-import { TEST_BOOKING_1, TEST_EVENT_1 } from "./test-data";
+import { PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1 } from "./test-data";
 import { Event } from "../src/models/event/Event";
 import { EventNotFoundError } from "../src/errors/EventNotFoundError";
 import { CreateEventRequest } from "../src/types/event";
@@ -19,6 +19,7 @@ describe("Event model tests", () => {
 
     beforeEach(() => {
         mockPrisma = prisma;
+
         spyGetFirstOnWaitList.mockClear();
         spyUpgrade.mockClear();
         spyBumpWaitList.mockClear();
@@ -248,7 +249,7 @@ describe("Event model tests", () => {
 
     test("Bump wait list for event with empty wait list", async () => {
         mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValue(9);
+        mockPrisma.booking.count.mockResolvedValue(5);
         mockPrisma.booking.findFirst.mockResolvedValue(null);
 
         const event = await Event.getById(1);
@@ -261,7 +262,7 @@ describe("Event model tests", () => {
     test("Bump wait list for event with 1 person in wait list", async () => {
         mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
         mockPrisma.booking.count.mockResolvedValue(2);
-        mockPrisma.booking.findFirst.mockResolvedValueOnce(TEST_BOOKING_1);
+        mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
         mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
         mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
 
@@ -276,7 +277,7 @@ describe("Event model tests", () => {
         mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
         mockPrisma.booking.count.mockResolvedValue(2);
         for (let i = 0; i < 5; i++) {
-            mockPrisma.booking.findFirst.mockResolvedValueOnce(TEST_BOOKING_1);
+            mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
         }
         mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
         mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
@@ -309,8 +310,9 @@ describe("Event model tests", () => {
         mockPrisma.booking.count.mockResolvedValueOnce(8);
         mockPrisma.booking.count.mockResolvedValueOnce(9);
         mockPrisma.booking.count.mockResolvedValueOnce(10);
+        mockPrisma.booking.findFirst.mockReset();
         for (let i = 0; i < 5; i++) {
-            mockPrisma.booking.findFirst.mockResolvedValueOnce(TEST_BOOKING_1);
+            mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
         }
         mockPrisma.booking.findFirst.mockResolvedValue(null);
         mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
