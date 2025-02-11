@@ -1,7 +1,7 @@
-import {CreateEvent} from "./event-types";
 import {BookingStatus, PrismaClient} from "@prisma/client";
 import {EventNotFoundError} from "../../errors/EventNotFoundError";
 import {Booking} from "../booking/Booking";
+import {CreateEventRequest} from "./event-utils";
 
 const prisma = new PrismaClient();
 
@@ -45,14 +45,19 @@ export class Event {
         
         const firstWaiting = await Booking.getFirstOnWaitList(this);
         if (!firstWaiting) return;
+        
         await firstWaiting.upgrade();
+        
+        // Recursively call bumpWaitList() until the event is sold out or the wait list is empty
+        await this.bumpWaitList();
     }
     
-    public static async create(event: CreateEvent): Promise<Event> {
+    public static async create(event: CreateEventRequest): Promise<Event> {
         event.date = new Date(event.date);
         const newEvent = await prisma.event.create({
             data: event
         });
+        
         return new Event(newEvent.id, newEvent.name, newEvent.description, newEvent.date, newEvent.location,
             newEvent.ticketLimit, newEvent.price);
     }
@@ -63,9 +68,11 @@ export class Event {
                 id
             }
         });
+        
         if (!event) {
             throw new EventNotFoundError(id);
         }
-        return new Event(event.id, event.name, event.description, event.date, event.location, event.ticketLimit, event.price);
+        return new Event(event.id, event.name, event.description, event.date, event.location, event.ticketLimit,
+            event.price);
     }
 }
