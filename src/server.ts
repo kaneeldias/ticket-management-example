@@ -2,11 +2,15 @@ import express from 'express';
 import {createEvent, getEventStatus} from "./routes/event";
 import {cancelBooking, createBooking} from "./routes/booking";
 import {errorHandler} from "./middleware/error-handler";
+import {requestLogger} from "./middleware/logger";
 
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json())
+
+// Middleware to log requests
+app.use(requestLogger);
 
 // Routes
 app.post("/initialize", createEvent);

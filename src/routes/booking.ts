@@ -4,6 +4,7 @@ import {User} from "../models/user/User";
 import {Booking} from "../models/booking/Booking";
 import {validateBookingRequest, validateCancelBookingRequest} from "../middleware/validators/booking";
 import {AddedToWaitingListResponse, BookingCancelledResponse, TicketCreatedResponse} from "../types/booking";
+import {Logger} from "../utils/Logger";
 
 export async function createBooking(req: Request, res: Response, next: NextFunction ): Promise<void> {
     try {
@@ -23,6 +24,8 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
         
         if (await event.isSoldOut()) {
             const wait = await Booking.addToWaitlist(event, user);
+            Logger.logInfo(req, `Added to waitlist: ${wait.getId()}`);
+            
             
             const response: AddedToWaitingListResponse = {
                 message: 'Event is sold out. User added to wait list',
@@ -33,6 +36,7 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
         }
         
         const ticket = await Booking.createTicket(event, user);
+        Logger.logInfo(req, `Ticket created: ${ticket.getId()}`);
         
         const response: TicketCreatedResponse = {
             message: 'Ticket booked successfully',

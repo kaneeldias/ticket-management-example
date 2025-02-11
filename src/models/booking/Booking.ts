@@ -23,6 +23,10 @@ export class Booking {
         this.status = status;
     }
     
+    public getId(): string {
+        return this.id;
+    }
+    
     public async getEvent(): Promise<Event> {
         return Event.getById(this.eventId);
     }
