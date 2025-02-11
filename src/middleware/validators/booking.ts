@@ -1,13 +1,5 @@
 import Joi from 'joi';
-
-type CreateBookingRequest = {
-    eventId: string;
-    userId: string;
-}
-
-type CancelBookingRequest = {
-    id: string;
-}
+import {CancelBookingRequest, CreateBookingRequest} from "../../types/booking";
 
 const createBookingSchema = Joi.object({
     eventId: Joi.string().required(),

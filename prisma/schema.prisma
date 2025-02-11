@@ -38,8 +38,6 @@ model Booking {
   deletedAt DateTime?
   Event     Event         @relation(fields: [eventId], references: [id])
   User      User          @relation(fields: [userId], references: [id])
-
-  @@unique([eventId, userId])
 }
 
 model User {

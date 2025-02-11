@@ -1,7 +1,7 @@
 import express from 'express';
-import {createEvent} from "./route-handlers/event-handlers";
-import {cancelBooking, createBooking} from "./route-handlers/booking-handlers";
-import {errorHandler} from "./route-handlers/error-handlers";
+import {createEvent, getEventStatus} from "./routes/event";
+import {cancelBooking, createBooking} from "./routes/booking";
+import {errorHandler} from "./middleware/error-handler";
 
 const app = express();
 
@@ -12,6 +12,7 @@ app.use(express.json())
 app.post("/initialize", createEvent);
 app.post('/book',  createBooking);
 app.post('/cancel',  cancelBooking);
+app.get('status/:eventId', getEventStatus);
 
 //Error handling middleware
 app.use(errorHandler);

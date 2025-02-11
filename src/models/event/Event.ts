@@ -1,7 +1,7 @@
 import {BookingStatus, PrismaClient} from "@prisma/client";
 import {EventNotFoundError} from "../../errors/EventNotFoundError";
 import {Booking} from "../booking/Booking";
-import {CreateEventRequest} from "./event-utils";
+import {CreateEventRequest} from "../../types/event";
 
 const prisma = new PrismaClient();
 

@@ -1,8 +1,9 @@
 import {BookingStatus, PrismaClient} from "@prisma/client";
 import {User} from "../user/User";
 import {Event} from "../event/Event";
-import {TicketNotFoundError} from "../../errors/TicketNotFoundError";
+import {BookingNotFoundError} from "../../errors/BookingNotFoundError";
 import {EventSoldOutError} from "../../errors/EventSoldOutError";
+import {BookingAlreadyCancelledError} from "../../errors/BookingAlreadyCancelledError";
 
 const prisma = new PrismaClient();
 
@@ -27,19 +28,36 @@ export class Booking {
     }
     
     public async cancel(): Promise<Booking> {
-        const updatedTicket = await prisma.booking.update({
+        const booking = await prisma.booking.findUnique({
             where: {
-                id: this.id
+                id: this.id,
+                deletedAt: null
+            }
+        });
+        
+        if (!booking) {
+            throw new BookingNotFoundError(this.id);
+        }
+        
+        if (booking.status === BookingStatus.CANCELLED) {
+            throw new BookingAlreadyCancelledError(this.id);
+        }
+        
+        const updatedBooking = await prisma.booking.update({
+            where: {
+                id: this.id,
+                deletedAt: null
             },
             data: {
                 status: BookingStatus.CANCELLED
             }
         });
-        if (!updatedTicket) {
-            throw new TicketNotFoundError(this.id);
+        
+        if (!updatedBooking) {
+            throw new BookingNotFoundError(this.id);
         }
         
-        this.status = updatedTicket.status;
+        this.status = updatedBooking.status;
         return this;
     }
     
@@ -53,7 +71,7 @@ export class Booking {
             }
         });
         if (!updatedTicket) {
-            throw new TicketNotFoundError(this.id);
+            throw new BookingNotFoundError(this.id);
         }
         
         this.status = updatedTicket.status;
@@ -84,7 +102,7 @@ export class Booking {
             }
         });
         if (!booking) {
-            throw new TicketNotFoundError(id);
+            throw new BookingNotFoundError(id);
         }
         return new Booking(booking.id, booking.eventId, booking.userId, booking.status);
     }
