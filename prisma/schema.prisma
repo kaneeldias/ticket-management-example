@@ -25,19 +25,21 @@ model Event {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-  Tickets     Ticket[]
-  Waitings    Waiting[]
+  Bookings    Booking[]
 }
 
-model Ticket {
-  id        String    @id @default(cuid())
+model Booking {
+  id        String        @id @default(cuid())
   eventId   String
   userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  status    BookingStatus
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
   deletedAt DateTime?
-  Event     Event     @relation(fields: [eventId], references: [id])
-  User      User      @relation(fields: [userId], references: [id])
+  Event     Event         @relation(fields: [eventId], references: [id])
+  User      User          @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
 }
 
 model User {
@@ -49,17 +51,11 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  Tickets   Ticket[]
-  Waitings  Waiting[]
+  Bookings  Booking[]
 }
 
-model Waiting {
-  id        String    @id @default(cuid())
-  eventId   String
-  userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-  Event     Event     @relation(fields: [eventId], references: [id])
-  User      User      @relation(fields: [userId], references: [id])
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
 }

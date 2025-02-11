@@ -1,13 +1,51 @@
-import {CreateEvent, EventType} from "./event-types";
-import {PrismaClient} from "@prisma/client";
+import {CreateEvent} from "./event-types";
+import {BookingStatus, PrismaClient} from "@prisma/client";
+import {EventNotFoundError} from "../../errors/EventNotFoundError";
+import {Booking} from "../booking/Booking";
 
 const prisma = new PrismaClient();
 
 export class Event {
-    private event: EventType;
+    private readonly id: string;
+    private readonly name: string;
+    private readonly description: string;
+    private readonly date: Date;
+    private readonly location: string;
+    private readonly ticketLimit: number;
+    private readonly price: number;
     
-    private constructor(event: EventType) {
-        this.event = event;
+    private constructor(id: string, name: string, description: string, date: Date, location: string,
+                        ticketLimit: number, price: number) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.date = date;
+        this.location = location;
+        this.ticketLimit = ticketLimit;
+        this.price = price;
+    }
+    
+    public getId(): string {
+        return this.id;
+    }
+    
+    public async isSoldOut(): Promise<boolean> {
+        const ticketsSold = await prisma.booking.count({
+            where: {
+                eventId: this.id,
+                status: BookingStatus.CONFIRMED,
+                deletedAt: null
+            }
+        })
+        return ticketsSold >= this.ticketLimit;
+    }
+    
+    public async bumpWaitList(): Promise<void> {
+        if (await this.isSoldOut()) return;
+        
+        const firstWaiting = await Booking.getFirstOnWaitList(this);
+        if (!firstWaiting) return;
+        await firstWaiting.upgrade();
     }
     
     public static async create(event: CreateEvent): Promise<Event> {
@@ -15,6 +53,19 @@ export class Event {
         const newEvent = await prisma.event.create({
             data: event
         });
-        return new Event(newEvent);
+        return new Event(newEvent.id, newEvent.name, newEvent.description, newEvent.date, newEvent.location,
+            newEvent.ticketLimit, newEvent.price);
+    }
+    
+    public static async getById(id: string): Promise<Event> {
+        const event = await prisma.event.findUnique({
+            where: {
+                id
+            }
+        });
+        if (!event) {
+            throw new EventNotFoundError(id);
+        }
+        return new Event(event.id, event.name, event.description, event.date, event.location, event.ticketLimit, event.price);
     }
 }

@@ -1,0 +1,6 @@
+POST http://localhost:3000/cancel
+Content-Type: application/json
+
+{
+  "id": "cm70bv9i70001hmm4mv2z89le"
+}

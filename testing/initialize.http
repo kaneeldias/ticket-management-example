@@ -6,6 +6,6 @@ Content-Type: application/json
   "description": "A night of fun and games",
   "date": "2021-12-31",
   "location": "Colombo",
-  "ticketLimit": 100,
+  "ticketLimit": 1,
   "price": 1000
 }

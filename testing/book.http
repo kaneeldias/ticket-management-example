@@ -1,0 +1,7 @@
+POST http://localhost:3000/book
+Content-Type: application/json
+
+{
+  "userId": "1",
+  "eventId": "cm709yjde0000hm20xz0r87yz"
+}
