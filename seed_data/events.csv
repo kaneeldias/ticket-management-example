@@ -1,0 +1,11 @@
+name,description,date,location,ticketLimit,price
+Concert,Live music concert,2024-05-20,New York,500,50.00
+Conference,Tech conference,2024-06-15,San Francisco,300,150.00
+Workshop,Coding workshop,2024-07-10,Los Angeles,100,75.00
+Seminar,Business seminar,2024-08-05,Chicago,200,100.00
+Meetup,Community meetup,2024-09-12,Boston,150,25.00
+Festival,Food festival,2024-10-20,Austin,1000,20.00
+Exhibition,Art exhibition,2024-11-25,Miami,250,30.00
+Webinar,Online webinar,2024-12-01,Online,500,10.00
+Hackathon,Coding hackathon,2025-01-15,Seattle,200,0.00
+Gala,Charity gala,2025-02-20,Washington D.C.,350,200.00
