@@ -5,13 +5,13 @@ import {Event} from "../event/Event";
 const prisma = new PrismaClient();
 
 export class User {
-    private readonly id: string;
+    private readonly id: number;
     private readonly email: string;
     private readonly password: string;
     private readonly firstName: string;
     private readonly lastName: string;
     
-    private constructor(id: string, email: string, password: string, firstName: string, lastName: string) {
+    private constructor(id: number, email: string, password: string, firstName: string, lastName: string) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -19,7 +19,7 @@ export class User {
         this.lastName = lastName;
     }
     
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
     
@@ -47,7 +47,7 @@ export class User {
         return !!wait;
     }
     
-    public static async getById(id: string): Promise<User> {
+    public static async getById(id: number): Promise<User> {
         const user = await prisma.user.findUnique({
             where: {
                 id,

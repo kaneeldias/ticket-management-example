@@ -6,7 +6,7 @@ import {CreateEventRequest} from "../../types/event";
 const prisma = new PrismaClient();
 
 export class Event {
-    private readonly id: string;
+    private readonly id: number;
     private readonly name: string;
     private readonly description: string;
     private readonly date: Date;
@@ -14,7 +14,7 @@ export class Event {
     private readonly ticketLimit: number;
     private readonly price: number;
     
-    private constructor(id: string, name: string, description: string, date: Date, location: string,
+    private constructor(id: number, name: string, description: string, date: Date, location: string,
                         ticketLimit: number, price: number) {
         this.id = id;
         this.name = name;
@@ -25,7 +25,7 @@ export class Event {
         this.price = price;
     }
     
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
     
@@ -83,7 +83,7 @@ export class Event {
             newEvent.ticketLimit, newEvent.price);
     }
     
-    public static async getById(id: string): Promise<Event> {
+    public static async getById(id: number): Promise<Event> {
         const event = await prisma.event.findUnique({
             where: {
                 id

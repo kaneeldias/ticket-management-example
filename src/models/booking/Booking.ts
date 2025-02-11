@@ -11,19 +11,19 @@ type BookingStatusType = "PENDING" | "CONFIRMED" | "CANCELLED"
 
 export class Booking {
     
-    private readonly id: string;
-    private readonly eventId: string;
-    private readonly userId: string;
+    private readonly id: number;
+    private readonly eventId: number;
+    private readonly userId: number;
     private status: BookingStatusType;
     
-    private constructor(id: string, eventId: string, userId: string, status: BookingStatusType) {
+    private constructor(id: number, eventId: number, userId: number, status: BookingStatusType) {
         this.id = id;
         this.eventId = eventId;
         this.userId = userId;
         this.status = status;
     }
     
-    public getId(): string {
+    public getId(): number {
         return this.id;
     }
     
@@ -98,7 +98,7 @@ export class Booking {
         return new Booking(firstWaiting.id, firstWaiting.eventId, firstWaiting.userId, firstWaiting.status);
     }
     
-    public static async getById(id: string): Promise<Booking> {
+    public static async getById(id: number): Promise<Booking> {
         const booking = await prisma.booking.findUnique({
             where: {
                 id,

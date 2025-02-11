@@ -1,8 +1,8 @@
 import {Booking} from "../models/booking/Booking";
 
 export type CreateBookingRequest = {
-    eventId: string;
-    userId: string;
+    eventId: number;
+    userId: number;
 }
 
 export type AddedToWaitingListResponse = {
@@ -16,7 +16,7 @@ export type TicketCreatedResponse = {
 }
 
 export type CancelBookingRequest = {
-    id: string;
+    id: number;
 }
 
 export type BookingCancelledResponse = {

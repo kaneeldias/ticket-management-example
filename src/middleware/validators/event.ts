@@ -11,7 +11,7 @@ const createEventSchema = Joi.object({
 });
 
 const eventStatusSchema = Joi.object({
-    eventId: Joi.string().required()
+    eventId: Joi.number().integer().required()
 });
 
 export function validateCreateEventRequest(event: any): CreateEventRequest {

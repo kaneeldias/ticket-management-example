@@ -15,7 +15,7 @@ export type EventCreatedResponse = {
 }
 
 export type EventStatusRequest = {
-    eventId: string;
+    eventId: number;
 }
 
 export type EventStatusResponse = {
