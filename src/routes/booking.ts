@@ -51,8 +51,8 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
 export async function cancelBooking(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const cancelBookingRequest = validateCancelBookingRequest(req.body);
-        const ticket = await Booking.getById(cancelBookingRequest.id);
-        const updatedTicket = await ticket.cancel();
+        const booking = await Booking.getById(cancelBookingRequest.id);
+        const updatedTicket = await booking.cancel();
 
         const response: BookingCancelledResponse = {
             message: "Booking cancelled successfully",
@@ -60,7 +60,7 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
         };
         res.status(200).json(response);
 
-        const event = await ticket.getEvent();
+        const event = await booking.getEvent();
         await event.bumpWaitList();
 
         return;

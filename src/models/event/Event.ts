@@ -1,11 +1,12 @@
-import { PrismaClient } from "@prisma/client";
-import { EventNotFoundError } from "../../errors/EventNotFoundError";
 import { Booking } from "../booking/Booking";
 import { CreateEventRequest } from "../../types/event";
 import { validateCreateEventRequest } from "../../middleware/validators/event";
+import { prisma } from "../../utils/db";
+import { EventNotFoundError } from "../../errors/EventNotFoundError";
 
-const prisma = new PrismaClient();
-
+/**
+ * Represents an event
+ */
 export class Event {
     private readonly id: number;
     private readonly name: string;
@@ -33,6 +34,13 @@ export class Event {
         this.price = price;
     }
 
+    /**
+     * Creates a new event
+     *
+     * @param event - The details of the event to create
+     * @returns The newly created event
+     * @throws {Joi.ValidationError} Thrown if the event details are invalid
+     */
     public static async create(event: CreateEventRequest): Promise<Event> {
         event = validateCreateEventRequest(event);
         event.date = new Date(event.date);
@@ -51,6 +59,12 @@ export class Event {
         );
     }
 
+    /**
+     * Retrieves an event by its ID
+     *
+     * @param id - The ID of the event to retrieve
+     * @returns The event with the specified ID if it exists
+     */
     public static async getById(id: number): Promise<Event> {
         const event = await prisma.event.findUnique({
             where: {
@@ -72,10 +86,20 @@ export class Event {
         );
     }
 
+    /**
+     * Retrieves the ID of the event
+     *
+     * @returns The ID of the event
+     */
     public getId(): number {
         return this.id;
     }
 
+    /**
+     * Determines whether the event is sold out or not
+     *
+     * @returns True if the event is sold out, false otherwise
+     */
     public async isSoldOut(): Promise<boolean> {
         const ticketsSold = await prisma.booking.count({
             where: {
@@ -87,6 +111,10 @@ export class Event {
         return ticketsSold >= this.ticketLimit;
     }
 
+    /**
+     * Bumps the first user on the wait list to a confirmed booking
+     * Recursively calls itself until the event is sold out or the wait list is empty
+     */
     public async bumpWaitList(): Promise<void> {
         if (await this.isSoldOut()) return;
 
@@ -99,6 +127,11 @@ export class Event {
         await this.bumpWaitList();
     }
 
+    /**
+     * Retrieves the number of tickets available for the event
+     *
+     * @returns The number of tickets available for the event
+     */
     public async getTicketsAvailableCount(): Promise<number> {
         const ticketsSold = await prisma.booking.count({
             where: {
@@ -110,6 +143,11 @@ export class Event {
         return this.ticketLimit - ticketsSold;
     }
 
+    /**
+     * Retrieves the number of users on the wait list for the event
+     *
+     * @returns The number of users on the wait list for the event
+     */
     public async getWaitingListCount(): Promise<number> {
         return prisma.booking.count({
             where: {

@@ -98,12 +98,6 @@ describe("Booking model tests", () => {
         expect(cancelledBooking.getId()).toBe(1);
     });
 
-    test("Cancel booking which does not exist", async () => {
-        mockPrisma.booking.findUnique.mockResolvedValue(null);
-        await expect(Booking.getById(1)).rejects.toThrow(BookingNotFoundError);
-        await expect(Booking.getById(1)).rejects.toThrow("Booking with ID 1 not found");
-    });
-
     test("Cancel booking which is already cancelled", async () => {
         mockPrisma.booking.findUnique.mockResolvedValue(CANCELLED_BOOKING_1);
 

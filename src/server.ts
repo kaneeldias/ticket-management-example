@@ -12,7 +12,6 @@ app.use(express.json());
 // Middleware to log requests
 app.use(requestLogger);
 
-// Routes
 app.post("/initialize", createEvent);
 app.post("/book", createBooking);
 app.post("/cancel", cancelBooking);
