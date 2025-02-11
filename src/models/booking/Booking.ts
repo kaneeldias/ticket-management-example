@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { User } from "../user/User";
 import { Event } from "../event/Event";
 import { BookingNotFoundError } from "../../errors/BookingNotFoundError";
@@ -91,22 +91,24 @@ export class Booking {
             throw new BookingAlreadyCancelledError(this.id);
         }
 
-        const updatedBooking = await prisma.booking.update({
-            where: {
-                id: this.id,
-                deletedAt: null,
-            },
-            data: {
-                status: "CANCELLED",
-            },
-        });
-
-        if (!updatedBooking) {
-            throw new BookingNotFoundError(this.id);
+        try {
+            const updatedBooking = await prisma.booking.update({
+                where: {
+                    id: this.id,
+                    deletedAt: null,
+                },
+                data: {
+                    status: "CANCELLED",
+                },
+            });
+            this.status = updatedBooking.status;
+            return this;
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+                throw new BookingNotFoundError(this.id);
+            }
+            throw error;
         }
-
-        this.status = updatedBooking.status;
-        return this;
     }
 
     public async upgrade(): Promise<Booking> {
@@ -118,19 +120,23 @@ export class Booking {
             throw new BookingAlreadyCancelledError(this.id);
         }
 
-        const updatedTicket = await prisma.booking.update({
-            where: {
-                id: this.id,
-            },
-            data: {
-                status: "CONFIRMED",
-            },
-        });
-        if (!updatedTicket) {
-            throw new BookingNotFoundError(this.id);
+        try {
+            const updatedTicket = await prisma.booking.update({
+                where: {
+                    id: this.id,
+                },
+                data: {
+                    status: "CONFIRMED",
+                },
+            });
+            this.status = updatedTicket.status;
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
+                throw new BookingNotFoundError(this.id);
+            }
+            throw error;
         }
 
-        this.status = updatedTicket.status;
         return this;
     }
 }
