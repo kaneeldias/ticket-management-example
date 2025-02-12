@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Booking } from "../models/Booking";
 import { validateBookingRequest, validateCancelBookingRequest } from "../middleware/validators/booking";
-import { AddedToWaitingListResponse, BookingCancelledResponse, TicketCreatedResponse } from "../types/booking";
+import { BookingCancelledResponse, BookingCreatedResponse } from "../types/booking";
 import { Logger } from "../utils/Logger";
 import { verifyLoggedInUser } from "../middleware/auth";
 import BookingManager from "../utils/BookingManager";
@@ -20,18 +20,18 @@ export async function createBooking(req: Request, res: Response, next: NextFunct
         if (bookingStatus === BookingStatus.PENDING) {
             Logger.logInfo(req, `Added to waitlist: ${booking.getId()}`);
 
-            const response: AddedToWaitingListResponse = {
+            const response: BookingCreatedResponse = {
                 message: "Event is sold out. User added to wait list",
-                wait: booking,
+                booking: booking,
             };
             res.status(201).json(response);
             return;
         }
 
         Logger.logInfo(req, `Ticket created: ${booking.getId()}`);
-        const response: TicketCreatedResponse = {
+        const response: BookingCreatedResponse = {
             message: "Ticket booked successfully",
-            ticket: booking,
+            booking: booking,
         };
         res.status(201).json(response);
         return;
@@ -59,6 +59,7 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
 
         const updatedTicket = await BookingManager.cancelBooking(cancelBookingRequest.id);
 
+        Logger.logInfo(req, `Booking cancelled: ${booking.getId()}`);
         const response: BookingCancelledResponse = {
             message: "Booking cancelled successfully",
             booking: updatedTicket,
