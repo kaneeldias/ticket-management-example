@@ -1,13 +1,13 @@
-import { MockPrismaClient, prisma } from "../__mocks__/prisma";
-import { Booking } from "../src/models/booking/Booking";
+import { MockPrismaClient, prisma } from "./__mocks__/prisma";
+import { Booking } from "../../src/models/booking/Booking";
 import { CANCELLED_BOOKING_1, PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1, TEST_USER_1 } from "./test-data";
-import { BookingNotFoundError } from "../src/errors/BookingNotFoundError";
-import { Event } from "../src/models/event/Event";
-import { User } from "../src/models/user/User";
-import { EventSoldOutError } from "../src/errors/EventSoldOutError";
-import { EventNotFoundError } from "../src/errors/EventNotFoundError";
-import { BookingAlreadyCancelledError } from "../src/errors/BookingAlreadyCancelledError";
-import { BookingAlreadyConfirmedError } from "../src/errors/BookingAlreadyConfirmedError";
+import { BookingNotFoundError } from "../../src/errors/BookingNotFoundError";
+import { Event } from "../../src/models/event/Event";
+import { User } from "../../src/models/user/User";
+import { EventSoldOutError } from "../../src/errors/EventSoldOutError";
+import { EventNotFoundError } from "../../src/errors/EventNotFoundError";
+import { BookingAlreadyCancelledError } from "../../src/errors/BookingAlreadyCancelledError";
+import { BookingAlreadyConfirmedError } from "../../src/errors/BookingAlreadyConfirmedError";
 
 jest.mock("@prisma/client", () => ({
     PrismaClient: jest.fn().mockImplementation(() => prisma),

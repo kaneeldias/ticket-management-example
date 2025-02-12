@@ -28,8 +28,11 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
-      - name: Test
-        run: npx jest --coverage
+      - name: Run unit tests
+        run: npx jest --config jest.unit.config.js --coverage
+
+      - name: Run integration tests
+        run: npx jest --config jest.integration.config.js --coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

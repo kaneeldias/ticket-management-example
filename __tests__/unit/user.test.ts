@@ -1,7 +1,7 @@
-import { MockPrismaClient, prisma } from "../__mocks__/prisma";
-import { User } from "../src/models/user/User";
-import { Event } from "../src/models/event/Event";
-import { UserNotFoundError } from "../src/errors/UserNotFoundError";
+import { MockPrismaClient, prisma } from "./__mocks__/prisma";
+import { User } from "../../src/models/user/User";
+import { Event } from "../../src/models/event/Event";
+import { UserNotFoundError } from "../../src/errors/UserNotFoundError";
 import { TEST_BOOKING_1, TEST_EVENT_1, TEST_USER_1 } from "./test-data";
 
 jest.mock("@prisma/client", () => ({
