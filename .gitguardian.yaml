@@ -1,0 +1,4 @@
+ignore-defaults: true
+paths-ignore:
+  - __tests__/integration/.env.test
+  - __tests__/integration/docker-compose.yml
