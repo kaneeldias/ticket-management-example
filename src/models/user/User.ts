@@ -59,11 +59,17 @@ export class User {
         return new User(user.id, user.email, user.firstName, user.lastName);
     }
 
+    /**
+     * Validates the password of a user
+     *
+     * @param email - The email of the user
+     * @param password - The password to validate
+     */
     //TODO: Add test cases
     public static async validatePassword(email: string, password: string): Promise<boolean> {
         const user = await prisma.user.findUnique({
             where: {
-                email,
+                email: email,
                 deletedAt: null,
             },
         });

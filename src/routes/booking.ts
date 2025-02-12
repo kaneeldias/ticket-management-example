@@ -5,12 +5,15 @@ import { Booking } from "../models/booking/Booking";
 import { validateBookingRequest, validateCancelBookingRequest } from "../middleware/validators/booking";
 import { AddedToWaitingListResponse, BookingCancelledResponse, TicketCreatedResponse } from "../types/booking";
 import { Logger } from "../utils/Logger";
+import { verifyLoggedInUser } from "../middleware/auth";
 
 export async function createBooking(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
         const createBookingRequest = validateBookingRequest(req.body);
-        const event = await Event.getById(createBookingRequest.eventId);
+        await verifyLoggedInUser(req, createBookingRequest.userId);
+
         const user = await User.getById(createBookingRequest.userId);
+        const event = await Event.getById(createBookingRequest.eventId);
 
         if (await user.hasTicket(event)) {
             res.status(400).json({ error: "User already has a booking" });

@@ -1,5 +1,6 @@
 POST http://localhost:3000/initialize
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJrYW5lZWxkaWFzQGdtYWlsLmNvbSIsImlhdCI6MTczOTM2OTY3OCwiZXhwIjoxNzM5MzczMjc4fQ.2rYIz48tv8hi4bU23kbmAze8y_8NUCBZITYpOhjWcFI
 
 {
   "name": "New Year's Eve Party",
