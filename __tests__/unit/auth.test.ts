@@ -13,6 +13,7 @@ describe("User model tests", () => {
 
     beforeEach(() => {
         mockPrisma = prisma;
+        process.env.JWT_SECRET = "TEST_JWT_SECRET";
     });
 
     test("Verify valid password", async () => {
