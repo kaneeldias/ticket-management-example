@@ -210,10 +210,10 @@ describe("Testing auth", () => {
             eventId: 1,
         });
         expect(response.status).toBe(201);
-        expect(response.body.ticket.id).toBeDefined();
-        expect(response.body.ticket.userId).toBe(userId);
-        expect(response.body.ticket.eventId).toBe(1);
-        expect(response.body.ticket.status).toBe("CONFIRMED");
+        expect(response.body.booking.id).toBeDefined();
+        expect(response.body.booking.userId).toBe(userId);
+        expect(response.body.booking.eventId).toBe(1);
+        expect(response.body.booking.status).toBe("CONFIRMED");
     });
 
     test("Create booking with valid token but wrong user", async () => {
@@ -284,11 +284,11 @@ describe("Testing auth", () => {
         });
 
         const response = await request(app).post("/cancel").set("Authorization", token).send({
-            id: bookingResponse.body.ticket.id,
+            id: bookingResponse.body.booking.id,
         });
 
         expect(response.status).toBe(200);
-        expect(response.body.booking.id).toBe(bookingResponse.body.ticket.id);
+        expect(response.body.booking.id).toBe(bookingResponse.body.booking.id);
         expect(response.body.booking.status).toBe("CANCELLED");
     });
 
@@ -332,7 +332,7 @@ describe("Testing auth", () => {
         });
 
         const response = await request(app).post("/cancel").set("Authorization", token2).send({
-            id: bookingResponse.body.ticket.id,
+            id: bookingResponse.body.booking.id,
         });
         expect(response.status).toBe(401);
         expect(response.body.error).toBe("Access denied");

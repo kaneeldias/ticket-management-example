@@ -39,9 +39,9 @@ describe("Testing POST /book", () => {
         expect(response.status).toBe(201);
 
         expect(body.message).toBe("Ticket booked successfully");
-        expect(body.ticket).toBeDefined();
+        expect(body.booking).toBeDefined();
 
-        const ticket = body.ticket;
+        const ticket = body.booking;
         expect(ticket.id).toBeDefined();
         expect(ticket.userId).toBe(TEST_USER_1.id);
         expect(ticket.eventId).toBe(TEST_EVENT_1.id);
@@ -162,9 +162,9 @@ describe("Testing POST /book", () => {
         expect(response.status).toBe(201);
         const body = response.body;
         expect(body.message).toBe("Event is sold out. User added to wait list");
-        expect(body.wait).toBeDefined();
+        expect(body.booking).toBeDefined();
 
-        const wait = body.wait;
+        const wait = body.booking;
         expect(wait.id).toBeDefined();
         expect(wait.userId).toBe(7);
         expect(wait.eventId).toBe(newEvent.id);
