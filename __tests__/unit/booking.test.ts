@@ -1,9 +1,9 @@
 import { MockPrismaClient, prisma } from "./mocks/prisma";
-import { Booking } from "../../src/models/booking/Booking";
+import { Booking } from "../../src/models/Booking";
 import { CANCELLED_BOOKING_1, PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1, TEST_USER_1 } from "../test-data";
 import { BookingNotFoundError } from "../../src/errors/BookingNotFoundError";
-import { Event } from "../../src/models/event/Event";
-import { User } from "../../src/models/user/User";
+import { Event } from "../../src/models/Event";
+import { User } from "../../src/models/User";
 import { EventSoldOutError } from "../../src/errors/EventSoldOutError";
 import { EventNotFoundError } from "../../src/errors/EventNotFoundError";
 import { BookingAlreadyCancelledError } from "../../src/errors/BookingAlreadyCancelledError";

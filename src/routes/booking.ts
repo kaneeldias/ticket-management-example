@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Event } from "../models/event/Event";
-import { User } from "../models/user/User";
-import { Booking } from "../models/booking/Booking";
+import { Event } from "../models/Event";
+import { User } from "../models/User";
+import { Booking } from "../models/Booking";
 import { validateBookingRequest, validateCancelBookingRequest } from "../middleware/validators/booking";
 import { AddedToWaitingListResponse, BookingCancelledResponse, TicketCreatedResponse } from "../types/booking";
 import { Logger } from "../utils/Logger";

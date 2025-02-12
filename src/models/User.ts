@@ -1,6 +1,6 @@
-import { Event } from "../event/Event";
-import { prisma } from "../../utils/db";
-import { UserNotFoundError } from "../../errors/UserNotFoundError";
+import { Event } from "./Event";
+import { prisma } from "../utils/db";
+import { UserNotFoundError } from "../errors/UserNotFoundError";
 
 /**
  * Represents a user

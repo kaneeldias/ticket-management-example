@@ -2,7 +2,7 @@
  * This file contains all the types related to bookings.
  */
 
-import { Booking } from "../models/booking/Booking";
+import { Booking } from "../models/Booking";
 
 /**
  * Request to create a booking.

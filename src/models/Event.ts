@@ -1,8 +1,8 @@
-import { Booking } from "../booking/Booking";
-import { CreateEventRequest } from "../../types/event";
-import { validateCreateEventRequest } from "../../middleware/validators/event";
-import { prisma } from "../../utils/db";
-import { EventNotFoundError } from "../../errors/EventNotFoundError";
+import { Booking } from "./Booking";
+import { CreateEventRequest } from "../types/event";
+import { validateCreateEventRequest } from "../middleware/validators/event";
+import { prisma } from "../utils/db";
+import { EventNotFoundError } from "../errors/EventNotFoundError";
 
 /**
  * Represents an event
