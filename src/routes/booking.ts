@@ -55,6 +55,8 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
     try {
         const cancelBookingRequest = validateCancelBookingRequest(req.body);
         const booking = await Booking.getById(cancelBookingRequest.id);
+        const bookingUserId = (await booking.getUser()).getId();
+        await verifyLoggedInUser(req, bookingUserId);
         const updatedTicket = await booking.cancel();
 
         // Ideally this should be done as a background job

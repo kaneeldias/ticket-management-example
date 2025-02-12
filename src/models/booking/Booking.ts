@@ -133,6 +133,16 @@ export class Booking {
     }
 
     /**
+     * Retrieves the user associated with the booking
+     *
+     * @returns The user associated with the booking
+     * @throws {UserNotFoundError} Thrown if the user associated with the booking does not exist
+     */
+    public async getUser(): Promise<User> {
+        return User.getById(this.userId);
+    }
+
+    /**
      * Cancels the booking
      *
      * @returns The updated booking

@@ -28,9 +28,11 @@ export async function verifyLoggedIn(req: Request, res: Response, next: NextFunc
  * @param req - Request object
  * @param userId - User ID
  */
-export async function verifyLoggedInUser(req: Request, userId: number): Promise<boolean> {
+export async function verifyLoggedInUser(req: Request, userId: number): Promise<void> {
     const token = await getToken(req);
-    return token.id === userId;
+    if (token.id !== userId) {
+        throw new AuthenticationError();
+    }
 }
 
 /**
