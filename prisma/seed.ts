@@ -11,7 +11,7 @@ async function main() {
 
 async function populateUsers() {
     const USERS = fs
-        .readFileSync("seed_data/users.csv", "utf8")
+        .readFileSync("assets/seed_data/users.csv", "utf8")
         .split("\n")
         .map((line: string) => {
             const [email, password, firstName, lastName] = line.split(",");
@@ -38,7 +38,7 @@ async function populateUsers() {
 
 async function populateEvents() {
     const EVENTS = fs
-        .readFileSync("seed_data/events.csv", "utf8")
+        .readFileSync("assets/seed_data/events.csv", "utf8")
         .split("\n")
         .map((line: string) => {
             const [name, description, date, location, ticketLimit, price] = line.split(",");

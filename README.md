@@ -375,6 +375,13 @@ The tests can be run using the following command:
 jest
 ```
 
+The test cases make use of mocking to mock external dependencies such as the database and the `prisma` client.
+This allows the tests to run in isolation and ensures that they are not affected by external factors.
+
+In addition, the test script creates a PostgreSQL database container using Docker and runs the tests against this
+database. This ensures that the tests are run against a consistent environment and that the database is reset between
+each test run.
+
 ### 6.9 Code Coverage
 
 [![codecov](https://codecov.io/gh/kaneeldias/ticket-management-example/graph/badge.svg?token=7eoUkqqaOf)](https://codecov.io/gh/kaneeldias/ticket-management-example)
