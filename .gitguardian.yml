@@ -1,7 +1,5 @@
-ignore-defaults: true
-paths-ignore:
-  - tests/integration/.env.test
-  - tests/integration/docker-compose.yml
-matches-ignore:
+version: 2
+
+ignore-matches:
   - name: "Test database password"
     match: "abcd@123"
