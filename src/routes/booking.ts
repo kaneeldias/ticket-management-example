@@ -60,6 +60,8 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
         };
         res.status(200).json(response);
 
+        // Bump the wait list after response is sent to the user
+        // Ideally this should be done in a background job
         const event = await booking.getEvent();
         await event.bumpWaitList();
 
