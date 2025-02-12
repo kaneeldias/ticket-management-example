@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import { BookingAlreadyCancelledError } from "../errors/BookingAlreadyCancelledError";
 import { Logger } from "../utils/Logger";
 import { BookingAlreadyConfirmedError } from "../errors/BookingAlreadyConfirmedError";
+import { AuthenticationError } from "../errors/AuthenticationError";
 
 /**
  * Error handler middleware.
@@ -19,6 +20,11 @@ import { BookingAlreadyConfirmedError } from "../errors/BookingAlreadyConfirmedE
  */
 export async function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): Promise<void> {
     Logger.logError(req, err);
+
+    if (err instanceof AuthenticationError) {
+        res.status(401).json({ error: err.message });
+        return;
+    }
 
     if (err instanceof ValidationError) {
         res.status(400).json({ error: err.message });
