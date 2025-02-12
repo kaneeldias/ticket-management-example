@@ -390,8 +390,9 @@ This project uses codecov to track code coverage. The code coverage report can b
 found [here](https://codecov.io/gh/kaneeldias/ticket-management-example).
 
 The code coverage report is integrated with GitHub Actions ([codecov.yaml](./.github/workflows/codecov.yaml)), so that
-the code coverage is checked on every push to the
-main branch in the repository.
+the code coverage is checked on every push to the main branch in the repository.
+
+![codecoverage on OR](./assets/codecov-pr.png)
 
 The code coverage report shows that the project has over 97% code coverage, with all classes and functions being tested.
 
