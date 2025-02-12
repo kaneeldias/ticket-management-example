@@ -19,7 +19,7 @@ module.exports = async () => {
 
     console.log("Initializing database...");
     execSync("npx prisma db push --schema ./prisma/schema.prisma");
-    execSync("npx prisma db seed --schema ./prisma/schema.prisma");
+    execSync("npx prisma db seed  --schema ./prisma/schema.prisma");
     console.log("Database initialized");
 
     console.log("Starting server...");

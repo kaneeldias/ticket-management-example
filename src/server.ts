@@ -3,6 +3,7 @@ import { createEvent, getEventStatus } from "./routes/event";
 import { cancelBooking, createBooking } from "./routes/booking";
 import { errorHandler } from "./middleware/error-handler";
 import { requestLogger } from "./middleware/logger";
+import { rateLimiter } from "./middleware/rate-limiter";
 
 const app = express();
 
@@ -11,6 +12,9 @@ app.use(express.json());
 
 // Middleware to log requests
 app.use(requestLogger);
+
+// Middleware to rate limit requests
+app.use(rateLimiter);
 
 app.post("/initialize", createEvent);
 app.post("/book", createBooking);
