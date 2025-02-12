@@ -245,6 +245,8 @@ The schema also includes relationships between the tables:
 - An `Event` can have multiple bookings
 - A `Booking` is associated with a user and an event
 
+![ER Diagram](./assets/prisma-erd.svg)
+
 ### 6.2 Models
 
 The models for the database tables can be found in the [`models`](./src/models) directory. Each model corresponds to a
