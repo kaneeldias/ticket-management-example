@@ -2,7 +2,7 @@
  * This file contains all the types related to the event entity.
  *
  */
-import { Event } from "../models/event/Event";
+import { Event } from "../models/Event";
 
 /**
  * Request to create an event.

@@ -239,7 +239,6 @@ describe("Testing auth", () => {
             userId: userId2,
             eventId: 1,
         });
-        console.log(response.body);
         expect(response.status).toBe(401);
         expect(response.body.error).toBe("Access denied");
     });

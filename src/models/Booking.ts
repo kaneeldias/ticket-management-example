@@ -1,10 +1,10 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { User } from "../user/User";
-import { Event } from "../event/Event";
-import { BookingNotFoundError } from "../../errors/BookingNotFoundError";
-import { EventSoldOutError } from "../../errors/EventSoldOutError";
-import { BookingAlreadyCancelledError } from "../../errors/BookingAlreadyCancelledError";
-import { BookingAlreadyConfirmedError } from "../../errors/BookingAlreadyConfirmedError";
+import { User } from "./User";
+import { Event } from "./Event";
+import { BookingNotFoundError } from "../errors/BookingNotFoundError";
+import { EventSoldOutError } from "../errors/EventSoldOutError";
+import { BookingAlreadyCancelledError } from "../errors/BookingAlreadyCancelledError";
+import { BookingAlreadyConfirmedError } from "../errors/BookingAlreadyConfirmedError";
 
 const prisma = new PrismaClient();
 
@@ -140,6 +140,15 @@ export class Booking {
      */
     public async getUser(): Promise<User> {
         return User.getById(this.userId);
+    }
+
+    /**
+     * Retrieves the status of the booking
+     *
+     * @returns The status of the booking
+     */
+    public async getStatus(): Promise<BookingStatusType> {
+        return this.status;
     }
 
     /**

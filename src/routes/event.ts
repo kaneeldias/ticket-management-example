@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { Event } from "../models/event/Event";
+import { Event } from "../models/Event";
 import { validateCreateEventRequest, validateEventStatusRequest } from "../middleware/validators/event";
 import { EventCreatedResponse, EventStatusResponse } from "../types/event";
 import { Logger } from "../utils/Logger";

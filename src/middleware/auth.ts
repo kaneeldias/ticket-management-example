@@ -4,7 +4,7 @@ import { prisma } from "../utils/db";
 import { AuthenticationError } from "../errors/AuthenticationError";
 import { JWTDecoded } from "../types/auth";
 import { UserNotFoundError } from "../errors/UserNotFoundError";
-import { User } from "../models/user/User";
+import { User } from "../models/User";
 
 /**
  * Middleware to verify if the user is logged in
