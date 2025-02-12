@@ -1,16 +1,24 @@
 import { TEST_EVENT_1 } from "../test-data";
 import { PrismaClient } from "@prisma/client";
 import { loadEnvVariables } from "./test-utils";
+import request from "supertest";
+import app from "../../src/app";
 
 let prisma: PrismaClient;
-let ENDPOINT: string;
+
+jest.mock("../../src/middleware/auth", () => {
+    return {
+        verifyLoggedIn: jest.fn().mockImplementation((req, res, next) => {
+            next();
+        }),
+    };
+});
 
 describe("Testing POST /initialize", () => {
     beforeAll((done) => {
         jest.resetModules();
         loadEnvVariables(".env.test");
         prisma = new PrismaClient();
-        ENDPOINT = `http://localhost:${process.env.PORT}`;
         done();
     });
 
@@ -19,23 +27,17 @@ describe("Testing POST /initialize", () => {
     });
 
     test("Creating a new event", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.pric,
         });
         expect(response.status).toBe(201);
 
-        const responseData = await response.json();
+        const responseData = await response.body;
         expect(responseData).toHaveProperty("message");
         expect(responseData).toHaveProperty("event");
         expect(responseData.message).toBe("Event created successfully");
@@ -75,290 +77,206 @@ describe("Testing POST /initialize", () => {
     });
 
     test("Creating a new event without name", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"name" is required');
     });
 
     test("Creating a new event without description", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"description" is required');
     });
 
     test("Creating a new event without date", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"date" is required');
     });
 
     test("Creating a new event without location", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"location" is required');
     });
 
     test("Creating a new event without ticketLimit", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"ticketLimit" is required');
     });
 
     test("Creating a new event without price", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"price" is required');
     });
 
     test("Creating a new event with empty name", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: "",
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: "",
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"name" is not allowed to be empty');
     });
 
     test("Creating a new event with empty description", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: "",
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: "",
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"description" is not allowed to be empty');
     });
 
     test("Creating a new event with invalid date format 1", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: "abcd",
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: "abcd",
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"date" must be a valid date');
     });
 
     test("Creating a new event with invalid date format 2", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: "2023-13-32",
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: "2023-13-32",
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"date" must be a valid date');
     });
 
     test("Creating a new event with empty location", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: "",
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: "",
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"location" is not allowed to be empty');
     });
 
     test("Creating a new event with empty ticketLimit", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: "",
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: "",
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"ticketLimit" must be a number');
     });
 
     test("Creating a new event with negative ticketLimit", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: -5,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: -5,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"ticketLimit" must be greater than or equal to 1');
     });
 
     test("Creating a new event with ticketLimit as string", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: "120",
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: "120",
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(201);
 
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("message");
         expect(responseData).toHaveProperty("event");
         expect(responseData.message).toBe("Event created successfully");
@@ -398,107 +316,77 @@ describe("Testing POST /initialize", () => {
     });
 
     test("Creating a new event with ticket limit as invalid string", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: "test",
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: "test",
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"ticketLimit" must be a number');
     });
 
     test("Creating a new event with ticket limit as float", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: 15.5,
-                price: TEST_EVENT_1.price,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: 15.5,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"ticketLimit" must be an integer');
     });
 
     test("Creating a new event with empty price", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: "",
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: "",
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"price" must be a number');
     });
 
     test("Creating a new event with negative price", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: -100,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: -100,
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"price" must be a positive number');
     });
 
     test("Creating a new event with price as string", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: "100",
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: "100",
         });
         expect(response.status).toBe(201);
 
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("message");
         expect(responseData).toHaveProperty("event");
         expect(responseData.message).toBe("Event created successfully");
@@ -538,23 +426,17 @@ describe("Testing POST /initialize", () => {
     });
 
     test("Creating a new event with price as float", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: 100.5,
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: 100.5,
         });
         expect(response.status).toBe(201);
 
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("message");
         expect(responseData).toHaveProperty("event");
         expect(responseData.message).toBe("Event created successfully");
@@ -594,22 +476,16 @@ describe("Testing POST /initialize", () => {
     });
 
     test("Creating a new event with invalid price as string", async () => {
-        const response = await fetch(`${ENDPOINT}/initialize`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: TEST_EVENT_1.name,
-                description: TEST_EVENT_1.description,
-                date: TEST_EVENT_1.date,
-                location: TEST_EVENT_1.location,
-                ticketLimit: TEST_EVENT_1.ticketLimit,
-                price: "test",
-            }),
+        const response = await request(app).post("/initialize").send({
+            name: TEST_EVENT_1.name,
+            description: TEST_EVENT_1.description,
+            date: TEST_EVENT_1.date,
+            location: TEST_EVENT_1.location,
+            ticketLimit: TEST_EVENT_1.ticketLimit,
+            price: "test",
         });
         expect(response.status).toBe(400);
-        const responseData = await response.json();
+        const responseData = response.body;
         expect(responseData).toHaveProperty("error");
         expect(responseData.error).toBe('"price" must be a number');
     });

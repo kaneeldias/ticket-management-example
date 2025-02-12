@@ -19,7 +19,6 @@ import { AuthenticationError } from "../errors/AuthenticationError";
  * @param _next The next flow control function
  */
 export async function errorHandler(err: Error, req: Request, res: Response, _next: NextFunction): Promise<void> {
-    console.error(err);
     Logger.logError(req, err);
 
     if (err instanceof AuthenticationError) {
@@ -42,6 +41,7 @@ export async function errorHandler(err: Error, req: Request, res: Response, _nex
         return;
     }
 
+    console.error(err);
     res.status(500).json({ error: "An unknown error occurred" });
     return;
 }

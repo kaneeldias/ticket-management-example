@@ -1,16 +1,27 @@
 import { TEST_EVENT_1, TEST_USER_1 } from "../test-data";
 import { PrismaClient } from "@prisma/client";
 import { loadEnvVariables } from "./test-utils";
+import request from "supertest";
+import app from "../../src/app";
 
 let prisma: PrismaClient;
-let ENDPOINT: string;
+
+jest.mock("../../src/middleware/auth", () => {
+    return {
+        verifyLoggedIn: jest.fn().mockImplementation((_, __, next) => {
+            next();
+        }),
+        verifyLoggedInUser: jest.fn().mockImplementation((_, __) => {
+            return true;
+        }),
+    };
+});
 
 describe("Testing POST /book", () => {
     beforeAll((done) => {
         jest.resetModules();
         loadEnvVariables(".env.test");
         prisma = new PrismaClient();
-        ENDPOINT = `http://localhost:${process.env.PORT}`;
         done();
     });
 
@@ -19,17 +30,12 @@ describe("Testing POST /book", () => {
     });
 
     test("Create booking with valid data", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: TEST_USER_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: TEST_USER_1,
         });
-        const body = await response.json();
+
+        const body = response.body;
         expect(response.status).toBe(201);
 
         expect(body.message).toBe("Ticket booked successfully");
@@ -53,36 +59,24 @@ describe("Testing POST /book", () => {
     });
 
     test("Create booking with event ID that does not exist", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: 99999,
-                userId: TEST_USER_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: 99999,
+            userId: TEST_USER_1.id,
         });
 
         expect(response.status).toBe(404);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe("Event with ID 99999 not found");
     });
 
     test("Create booking with user ID that does not exist", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: 99999,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: 99999,
         });
 
         expect(response.status).toBe(404);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe("User with ID 99999 not found");
     });
 
@@ -95,19 +89,13 @@ describe("Testing POST /book", () => {
             },
         });
 
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: 2,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: 2,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe("User already has a booking");
     });
 
@@ -120,19 +108,13 @@ describe("Testing POST /book", () => {
             },
         });
 
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: 3,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: 3,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe("User is already on wait list");
     });
 
@@ -172,19 +154,13 @@ describe("Testing POST /book", () => {
             },
         });
 
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: newEvent.id,
-                userId: 7,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: newEvent.id,
+            userId: 7,
         });
 
         expect(response.status).toBe(201);
-        const body = await response.json();
+        const body = response.body;
         expect(body.message).toBe("Event is sold out. User added to wait list");
         expect(body.wait).toBeDefined();
 
@@ -206,136 +182,88 @@ describe("Testing POST /book", () => {
     });
 
     test("Create booking with missing event ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                userId: TEST_USER_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            userId: TEST_USER_1.id,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"eventId" is required');
     });
 
     test("Create booking with missing user ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"userId" is required');
     });
 
     test("Create booking with invalid event ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: "invalid",
-                userId: TEST_USER_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: "invalid",
+            userId: TEST_USER_1.id,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"eventId" must be a number');
     });
 
     test("Create booking with invalid user ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: "invalid",
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: "invalid",
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"userId" must be a number');
     });
 
     test("Create booking with empty event ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: "",
-                userId: TEST_USER_1.id,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: "",
+            userId: TEST_USER_1.id,
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"eventId" must be a number');
     });
 
     test("Create booking with empty user ID", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: TEST_EVENT_1.id,
-                userId: "",
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: TEST_EVENT_1.id,
+            userId: "",
         });
 
         expect(response.status).toBe(400);
-        const body = await response.json();
+        const body = response.body;
         expect(body.error).toBe('"userId" must be a number');
     });
 
     test("Create booking with event ID as string of number", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: "3",
-                userId: 8,
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: "3",
+            userId: 8,
         });
 
         expect(response.status).toBe(201);
-        const data = await response.json();
+        const data = response.body;
         expect(data.message).toBe("Ticket booked successfully");
     });
 
     test("Create booking with user ID as string of number", async () => {
-        const response = await fetch(`${ENDPOINT}/book`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                eventId: 4,
-                userId: "8",
-            }),
+        const response = await request(app).post("/book").send({
+            eventId: 4,
+            userId: "8",
         });
 
         expect(response.status).toBe(201);
-        const data = await response.json();
+        const data = response.body;
         expect(data.message).toBe("Ticket booked successfully");
     });
 });

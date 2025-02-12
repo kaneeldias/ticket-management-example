@@ -1,5 +1,0 @@
-version: 2
-
-ignore-matches:
-  - name: "Test database password"
-    match: "abcd@123"

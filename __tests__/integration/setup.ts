@@ -1,6 +1,5 @@
 import { execSync } from "child_process";
 import { loadEnvVariables } from "./test-utils";
-import { exec } from "node:child_process";
 
 module.exports = async () => {
     loadEnvVariables(".env.test");
@@ -21,11 +20,4 @@ module.exports = async () => {
     execSync("npx prisma db push --schema ./prisma/schema.prisma");
     execSync("npx prisma db seed  --schema ./prisma/schema.prisma");
     console.log("Database initialized");
-
-    console.log("Starting server...");
-    exec("ts-node src/server.ts");
-    console.log("Server started");
-
-    // sleep for 5 seconds to allow server to start
-    await new Promise((resolve) => setTimeout(resolve, 5000));
 };
