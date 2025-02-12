@@ -44,7 +44,6 @@ export class User {
      * @param email - The email of the user to be retrieved
      * @returns The user with the specified email
      */
-    //TODO: Add test cases
     public static async getByEmail(email: string): Promise<User> {
         const user = await prisma.user.findUnique({
             where: {
@@ -57,28 +56,6 @@ export class User {
             throw new UserNotFoundError(email);
         }
         return new User(user.id, user.email, user.firstName, user.lastName);
-    }
-
-    /**
-     * Validates the password of a user
-     *
-     * @param email - The email of the user
-     * @param password - The password to validate
-     */
-    //TODO: Add test cases
-    public static async validatePassword(email: string, password: string): Promise<boolean> {
-        const user = await prisma.user.findUnique({
-            where: {
-                email: email,
-                deletedAt: null,
-            },
-        });
-
-        if (!user) {
-            throw new UserNotFoundError(email);
-        }
-
-        return user.password === password;
     }
 
     /**

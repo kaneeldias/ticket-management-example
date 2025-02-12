@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from "express";
 import { prisma } from "../utils/db";
 import { AuthenticationError } from "../errors/AuthenticationError";
 import { JWTDecoded } from "../types/auth";
+import { UserNotFoundError } from "../errors/UserNotFoundError";
+import { User } from "../models/user/User";
 
 /**
  * Middleware to verify if the user is logged in
@@ -70,4 +72,47 @@ async function verifyUserToken(userId: number, email: string) {
     });
     if (!emailInDb) throw new AuthenticationError();
     if (emailInDb.email !== email) throw new AuthenticationError();
+}
+
+/**
+ * Validates the password of a user
+ *
+ * @param email - The email of the user
+ * @param password - The password to validate
+ */
+export async function validatePassword(email: string, password: string): Promise<boolean> {
+    const user = await prisma.user.findUnique({
+        select: {
+            password: true,
+        },
+        where: {
+            email: email,
+            deletedAt: null,
+        },
+    });
+
+    if (!user) {
+        throw new UserNotFoundError(email);
+    }
+
+    return user.password === password;
+}
+
+/**
+ * Generates a JWT token for a user
+ *
+ * @param email - The email of the user
+ */
+export async function generateToken(email: string): Promise<string> {
+    const user = await User.getByEmail(email);
+    return jwt.sign(
+        {
+            id: user.getId(),
+            email: user.getEmail(),
+        },
+        process.env.JWT_SECRET || "",
+        {
+            expiresIn: "1h",
+        },
+    );
 }
