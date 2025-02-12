@@ -143,6 +143,15 @@ export class Booking {
     }
 
     /**
+     * Retrieves the status of the booking
+     *
+     * @returns The status of the booking
+     */
+    public async getStatus(): Promise<BookingStatusType> {
+        return this.status;
+    }
+
+    /**
      * Cancels the booking
      *
      * @returns The updated booking

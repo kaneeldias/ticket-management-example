@@ -1,4 +1,3 @@
-import { Booking } from "./Booking";
 import { CreateEventRequest } from "../types/event";
 import { validateCreateEventRequest } from "../middleware/validators/event";
 import { prisma } from "../utils/db";
@@ -111,22 +110,22 @@ export class Event {
         return ticketsSold >= this.ticketLimit;
     }
 
-    /**
-     * Bumps the first user on the wait list to a confirmed booking
-     * Recursively calls itself until the event is sold out or the wait list is empty
-     */
-    public async bumpWaitList(): Promise<void> {
-        if (await this.isSoldOut()) return;
-
-        const firstWaiting = await Booking.getFirstOnWaitList(this);
-        if (!firstWaiting) return;
-
-        await firstWaiting.upgrade();
-
-        // Recursively call bumpWaitList() until the event is sold out or the wait list is empty
-        await this.bumpWaitList();
-    }
-
+    // /**
+    //  * Bumps the first user on the wait list to a confirmed booking
+    //  * Recursively calls itself until the event is sold out or the wait list is empty
+    //  */
+    // public async bumpWaitList(): Promise<void> {
+    //     if (await this.isSoldOut()) return;
+    //
+    //     const firstWaiting = await Booking.getFirstOnWaitList(this);
+    //     if (!firstWaiting) return;
+    //
+    //     await firstWaiting.upgrade();
+    //
+    //     // Recursively call bumpWaitList() until the event is sold out or the wait list is empty
+    //     await this.bumpWaitList();
+    // }
+    //
     /**
      * Retrieves the number of tickets available for the event
      *

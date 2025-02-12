@@ -1,5 +1,5 @@
 import { MockPrismaClient, prisma } from "./mocks/prisma";
-import { PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1 } from "../test-data";
+import { TEST_EVENT_1 } from "../test-data";
 import { Event } from "../../src/models/Event";
 import { EventNotFoundError } from "../../src/errors/EventNotFoundError";
 import { CreateEventRequest } from "../../src/types/event";
@@ -12,7 +12,7 @@ jest.mock("@prisma/client", () => ({
 
 const spyGetFirstOnWaitList = jest.spyOn(Booking, "getFirstOnWaitList");
 const spyUpgrade = jest.spyOn(Booking.prototype, "upgrade");
-const spyBumpWaitList = jest.spyOn(Event.prototype, "bumpWaitList");
+// const spyBumpWaitList = jest.spyOn(Event.prototype, "bumpWaitList");
 
 describe("Event model tests", () => {
     let mockPrisma: MockPrismaClient;
@@ -22,7 +22,7 @@ describe("Event model tests", () => {
 
         spyGetFirstOnWaitList.mockClear();
         spyUpgrade.mockClear();
-        spyBumpWaitList.mockClear();
+        // spyBumpWaitList.mockClear();
     });
 
     test("Get event by ID which exists", async () => {
@@ -237,92 +237,92 @@ describe("Event model tests", () => {
         expect(isSoldOut).toBe(false);
     });
 
-    test("Bump wait list for sold out event", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.findUnique.mockResolvedValue(TEST_BOOKING_1);
-        mockPrisma.booking.count.mockResolvedValue(10);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).not.toHaveBeenCalled();
-    });
-
-    test("Bump wait list for event with empty wait list", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValue(5);
-        mockPrisma.booking.findFirst.mockResolvedValue(null);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).toHaveBeenCalled();
-        expect(spyUpgrade).not.toHaveBeenCalled();
-        expect(spyBumpWaitList).toHaveBeenCalledTimes(1);
-    });
-
-    test("Bump wait list for event with 1 person in wait list", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValue(2);
-        mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
-        mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
-        mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(2);
-        expect(spyUpgrade).toHaveBeenCalledTimes(1);
-        expect(spyBumpWaitList).toHaveBeenCalledTimes(2);
-    });
-
-    test("Bump wait list for event with 5 people in wait list", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValue(2);
-        for (let i = 0; i < 5; i++) {
-            mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
-        }
-        mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
-        mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(6);
-        expect(spyUpgrade).toHaveBeenCalledTimes(5);
-        expect(spyBumpWaitList).toHaveBeenCalledTimes(6);
-    });
-
-    test("Bump wait list for event with 5 people in wait list, but event is sold out", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValue(10);
-        for (let i = 0; i < 5; i++) {
-            mockPrisma.booking.findFirst.mockResolvedValueOnce(TEST_BOOKING_1);
-        }
-        mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
-        mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).not.toHaveBeenCalled();
-        expect(spyUpgrade).not.toHaveBeenCalled();
-        expect(spyBumpWaitList).toHaveBeenCalledTimes(1);
-    });
-
-    test("Bump wait list for event with 5 people in wait list, there are only 2 openings", async () => {
-        mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
-        mockPrisma.booking.count.mockResolvedValueOnce(8);
-        mockPrisma.booking.count.mockResolvedValueOnce(9);
-        mockPrisma.booking.count.mockResolvedValueOnce(10);
-        mockPrisma.booking.findFirst.mockReset();
-        for (let i = 0; i < 5; i++) {
-            mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
-        }
-        mockPrisma.booking.findFirst.mockResolvedValue(null);
-        mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
-
-        const event = await Event.getById(1);
-        await event.bumpWaitList();
-        expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(2);
-        expect(spyUpgrade).toHaveBeenCalledTimes(2);
-        expect(spyBumpWaitList).toHaveBeenCalledTimes(3);
-    });
+    // test("Bump wait list for sold out event", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.findUnique.mockResolvedValue(TEST_BOOKING_1);
+    //     mockPrisma.booking.count.mockResolvedValue(10);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).not.toHaveBeenCalled();
+    // });
+    //
+    // test("Bump wait list for event with empty wait list", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.count.mockResolvedValue(5);
+    //     mockPrisma.booking.findFirst.mockResolvedValue(null);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).toHaveBeenCalled();
+    //     expect(spyUpgrade).not.toHaveBeenCalled();
+    //     expect(spyBumpWaitList).toHaveBeenCalledTimes(1);
+    // });
+    //
+    // test("Bump wait list for event with 1 person in wait list", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.count.mockResolvedValue(2);
+    //     mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
+    //     mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
+    //     mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(2);
+    //     expect(spyUpgrade).toHaveBeenCalledTimes(1);
+    //     expect(spyBumpWaitList).toHaveBeenCalledTimes(2);
+    // });
+    //
+    // test("Bump wait list for event with 5 people in wait list", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.count.mockResolvedValue(2);
+    //     for (let i = 0; i < 5; i++) {
+    //         mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
+    //     }
+    //     mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
+    //     mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(6);
+    //     expect(spyUpgrade).toHaveBeenCalledTimes(5);
+    //     expect(spyBumpWaitList).toHaveBeenCalledTimes(6);
+    // });
+    //
+    // test("Bump wait list for event with 5 people in wait list, but event is sold out", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.count.mockResolvedValue(10);
+    //     for (let i = 0; i < 5; i++) {
+    //         mockPrisma.booking.findFirst.mockResolvedValueOnce(TEST_BOOKING_1);
+    //     }
+    //     mockPrisma.booking.findFirst.mockResolvedValueOnce(null);
+    //     mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).not.toHaveBeenCalled();
+    //     expect(spyUpgrade).not.toHaveBeenCalled();
+    //     expect(spyBumpWaitList).toHaveBeenCalledTimes(1);
+    // });
+    //
+    // test("Bump wait list for event with 5 people in wait list, there are only 2 openings", async () => {
+    //     mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);
+    //     mockPrisma.booking.count.mockResolvedValueOnce(8);
+    //     mockPrisma.booking.count.mockResolvedValueOnce(9);
+    //     mockPrisma.booking.count.mockResolvedValueOnce(10);
+    //     mockPrisma.booking.findFirst.mockReset();
+    //     for (let i = 0; i < 5; i++) {
+    //         mockPrisma.booking.findFirst.mockResolvedValueOnce(PENDING_BOOKING_1);
+    //     }
+    //     mockPrisma.booking.findFirst.mockResolvedValue(null);
+    //     mockPrisma.booking.update.mockResolvedValue(TEST_BOOKING_1);
+    //
+    //     const event = await Event.getById(1);
+    //     await event.bumpWaitList();
+    //     expect(spyGetFirstOnWaitList).toHaveBeenCalledTimes(2);
+    //     expect(spyUpgrade).toHaveBeenCalledTimes(2);
+    //     expect(spyBumpWaitList).toHaveBeenCalledTimes(3);
+    // });
 
     test("Get tickets available count 1", async () => {
         mockPrisma.event.findUnique.mockResolvedValue(TEST_EVENT_1);

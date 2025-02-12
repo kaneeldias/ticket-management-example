@@ -24,7 +24,7 @@ export class Logger {
             url: req.url,
             body: req.body,
         };
-        console.log(JSON.stringify(requestLog));
+        // console.log(JSON.stringify(requestLog));
     }
 
     /**
@@ -47,7 +47,7 @@ export class Logger {
             statusCode: res.statusCode,
             body: responseBody,
         };
-        console.log(JSON.stringify(responseLog));
+        // console.log(JSON.stringify(responseLog));
     }
 
     /**
