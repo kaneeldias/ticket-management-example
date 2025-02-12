@@ -1,0 +1,427 @@
+<?xml version="1.0" standalone="no"?>
+<svg id="mermaid-svg" width="undefined" xmlns="http://www.w3.org/2000/svg"
+     height="undefined" style="max-width: 366.91632080078125px;" viewBox="0 0 366.91632080078125 518.5714721679688">
+    <style>#mermaid-svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}#mermaid-svg
+        .error-icon{fill:#552222;}#mermaid-svg .error-text{fill:#552222;stroke:#552222;}#mermaid-svg
+        .edge-thickness-normal{stroke-width:2px;}#mermaid-svg .edge-thickness-thick{stroke-width:3.5px;}#mermaid-svg
+        .edge-pattern-solid{stroke-dasharray:0;}#mermaid-svg .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-svg
+        .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-svg .marker{fill:#333333;}#mermaid-svg
+        .marker.cross{stroke:#333333;}#mermaid-svg svg{font-family:"trebuchet
+        ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-svg .entityBox{fill:#ECECFF;stroke:#9370DB;}#mermaid-svg
+        .attributeBoxOdd{fill:#ffffff;stroke:#9370DB;}#mermaid-svg
+        .attributeBoxEven{fill:#f2f2f2;stroke:#9370DB;}#mermaid-svg
+        .relationshipLabelBox{fill:hsl(80,100%,96.2745098039%);opacity:0.7;background-color:hsl(80,100%,96.2745098039%);}#mermaid-svg
+        .relationshipLabelBox rect{opacity:0.5;}#mermaid-svg
+        .relationshipLine{stroke:#333333;}#mermaid-svg:root{--mermaid-font-family:"trebuchet
+        ms",verdana,arial,sans-serif;}#mermaid-svg er{fill:apa;}
+    </style>
+    <g/>
+    <defs>
+        <marker id="ONLY_ONE_START" refX="0" refY="9" markerWidth="18" markerHeight="18" orient="auto">
+            <path stroke="gray" fill="none" d="M9,0 L9,18 M15,0 L15,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ONLY_ONE_END" refX="18" refY="9" markerWidth="18" markerHeight="18" orient="auto">
+            <path stroke="gray" fill="none" d="M3,0 L3,18 M9,0 L9,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ZERO_OR_ONE_START" refX="0" refY="9" markerWidth="30" markerHeight="18" orient="auto">
+            <circle stroke="gray" fill="white" cx="21" cy="9" r="6"/>
+            <path stroke="gray" fill="none" d="M9,0 L9,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ZERO_OR_ONE_END" refX="30" refY="9" markerWidth="30" markerHeight="18" orient="auto">
+            <circle stroke="gray" fill="white" cx="9" cy="9" r="6"/>
+            <path stroke="gray" fill="none" d="M21,0 L21,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ONE_OR_MORE_START" refX="18" refY="18" markerWidth="45" markerHeight="36" orient="auto">
+            <path stroke="gray" fill="none" d="M0,18 Q 18,0 36,18 Q 18,36 0,18 M42,9 L42,27"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ONE_OR_MORE_END" refX="27" refY="18" markerWidth="45" markerHeight="36" orient="auto">
+            <path stroke="gray" fill="none" d="M3,9 L3,27 M9,18 Q27,0 45,18 Q27,36 9,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ZERO_OR_MORE_START" refX="18" refY="18" markerWidth="57" markerHeight="36" orient="auto">
+            <circle stroke="gray" fill="white" cx="48" cy="18" r="6"/>
+            <path stroke="gray" fill="none" d="M0,18 Q18,0 36,18 Q18,36 0,18"/>
+        </marker>
+    </defs>
+    <defs>
+        <marker id="ZERO_OR_MORE_END" refX="39" refY="18" markerWidth="57" markerHeight="36" orient="auto">
+            <circle stroke="gray" fill="white" cx="9" cy="18" r="6"/>
+            <path stroke="gray" fill="none" d="M21,18 Q39,0 57,18 Q39,36 21,18"/>
+        </marker>
+    </defs>
+    <path class="er relationshipLine"
+          d="M123.02061207315138,154.2857208251953L115.42809655286216,162.61905415852866C107.83558103257292,170.95238749186197,92.65054999199447,187.61905415852866,85.05803447170524,204.2857208251953C77.46551895141602,220.95238749186197,77.46551895141602,237.61905415852866,77.46551895141602,245.95238749186197L77.46551895141602,254.2857208251953"
+          stroke="gray" fill="none" marker-end="url(#ONLY_ONE_END)" marker-start="url(#ZERO_OR_MORE_START)"/>
+    <path class="er relationshipLine"
+          d="M245.36858241537402,154.2857208251953L252.96109793566325,162.61905415852866C260.5536134559525,170.95238749186197,275.7386444965309,187.61905415852866,283.33116001682015,207.95238876342773C290.9236755371094,228.2857233683268,290.9236755371094,252.28572591145834,290.9236755371094,264.2857271830241L290.9236755371094,276.28572845458984"
+          stroke="gray" fill="none" marker-end="url(#ONLY_ONE_END)" marker-start="url(#ZERO_OR_MORE_START)"/>
+    <g id="Event" transform="translate(20,254.2857208251953 )">
+        <rect class="er entityBox" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="0"
+              width="114.9310417175293" height="244.28572463989258"/>
+        <text class="er entityLabel" id="entity-Event" x="0" y="0" dominant-baseline="middle" text-anchor="middle"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 12px"
+              transform="translate(57.46552085876465,12.142857551574707)">Event
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="24.285715103149414"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-1-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,35.28571557998657)">Int
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="24.285715103149414" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-1-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,35.28571557998657)">id
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="46.28571605682373"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-2-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,57.28571653366089)">String
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="46.28571605682373" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-2-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,57.28571653366089)">name
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="68.28571701049805"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-3-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,79.2857174873352)">String
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="68.28571701049805" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-3-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,79.2857174873352)">description
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="90.28571796417236"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-4-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,101.28571844100952)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="90.28571796417236" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-4-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,101.28571844100952)">date
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="112.28571891784668"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-5-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,123.28571939468384)">String
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="112.28571891784668" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-5-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,123.28571939468384)">location
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="134.285719871521"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-6-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,145.28572034835815)">Int
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="134.285719871521" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-6-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,145.28572034835815)">ticketLimit
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="156.2857208251953"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-7-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,167.28572130203247)">Float
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="156.2857208251953" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-7-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,167.28572130203247)">price
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="178.28572177886963"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-8-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,189.2857222557068)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="178.28572177886963" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-8-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,189.2857222557068)">createdAt
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="200.28572273254395"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-9-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,211.2857232093811)">DateTime
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="200.28572273254395" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-9-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,211.2857232093811)">updatedAt
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="222.28572368621826"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-10-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,233.28572416305542)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="222.28572368621826" width="61.12117385864258" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Event-attr-10-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,233.28572416305542)">deletedAt
+        </text>
+    </g>
+    <g id="Booking" transform="translate(118.3435001373291,20 )">
+        <rect class="er entityBox" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="0"
+              width="131.7021942138672" height="134.285719871521"/>
+        <text class="er entityLabel" id="entity-Booking" x="0" y="0" dominant-baseline="middle" text-anchor="middle"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 12px"
+              transform="translate(65.8510971069336,12.142857551574707)">Booking
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="24.285715103149414"
+              width="73.52678680419922" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-1-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,35.28571557998657)">Int
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="073.52678680419922"
+              y="24.285715103149414" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-1-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(78.52678680419922,35.28571557998657)">id
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="46.28571605682373"
+              width="73.52678680419922" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-2-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,57.28571653366089)">BookingStatus
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="073.52678680419922"
+              y="46.28571605682373" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-2-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(78.52678680419922,57.28571653366089)">status
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="68.28571701049805"
+              width="73.52678680419922" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-3-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,79.2857174873352)">DateTime
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="073.52678680419922"
+              y="68.28571701049805" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-3-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(78.52678680419922,79.2857174873352)">createdAt
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="90.28571796417236"
+              width="73.52678680419922" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-4-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,101.28571844100952)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="073.52678680419922"
+              y="90.28571796417236" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-4-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(78.52678680419922,101.28571844100952)">updatedAt
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="112.28571891784668"
+              width="73.52678680419922" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-5-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,123.28571939468384)">DateTime
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="073.52678680419922"
+              y="112.28571891784668" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-Booking-attr-5-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(78.52678680419922,123.28571939468384)">deletedAt
+        </text>
+    </g>
+    <g id="User" transform="translate(234.93103790283203,276.28572845458984 )">
+        <rect class="er entityBox" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="0"
+              width="111.98527526855469" height="200.28572273254395"/>
+        <text class="er entityLabel" id="entity-User" x="0" y="0" dominant-baseline="middle" text-anchor="middle"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 12px"
+              transform="translate(55.992637634277344,12.142857551574707)">User
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="24.285715103149414"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-1-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,35.28571557998657)">Int
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="24.285715103149414" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-1-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,35.28571557998657)">id
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="46.28571605682373"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-2-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,57.28571653366089)">String
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="46.28571605682373" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-2-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,57.28571653366089)">email
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="68.28571701049805"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-3-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,79.2857174873352)">String
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="68.28571701049805" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-3-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,79.2857174873352)">password
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="90.28571796417236"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-4-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,101.28571844100952)">String
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="90.28571796417236" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-4-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,101.28571844100952)">firstName
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="112.28571891784668"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-5-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,123.28571939468384)">String
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="112.28571891784668" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-5-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,123.28571939468384)">lastName
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="134.285719871521"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-6-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,145.28572034835815)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="134.285719871521" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-6-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,145.28572034835815)">createdAt
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="156.2857208251953"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-7-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,167.28572130203247)">DateTime
+        </text>
+        <rect class="er attributeBoxOdd" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="156.2857208251953" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-7-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,167.28572130203247)">updatedAt
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="0" y="178.28572177886963"
+              width="53.80986785888672" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-8-type" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(5,189.2857222557068)">DateTime
+        </text>
+        <rect class="er attributeBoxEven" fill="honeydew" fill-opacity="100%" stroke="gray" x="053.80986785888672"
+              y="178.28572177886963" width="58.17540740966797" height="22.000000953674316"/>
+        <text class="er entityLabel" id="entity-User-attr-8-name" x="0" y="0" dominant-baseline="middle"
+              text-anchor="left"
+              style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 10.2px"
+              transform="translate(58.80986785888672,189.2857222557068)">deletedAt
+        </text>
+    </g>
+    <rect class="er relationshipLabelBox" x="72.4746675491333" y="191.78187084197998" width="30.549108505249023"
+          height="14.285715103149414" fill="white" fill-opacity="85%"/>
+    <text class="er relationshipLabel" id="rel11" x="87.74922180175781" y="198.9247283935547" text-anchor="middle"
+          dominant-baseline="middle"
+          style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 12px">Event
+    </text>
+    <rect class="er relationshipLabelBox" x="271.67451190948486" y="202.20339488983154" width="24.326452255249023"
+          height="14.285715103149414" fill="white" fill-opacity="85%"/>
+    <text class="er relationshipLabel" id="rel12" x="283.8377380371094" y="209.34625244140625" text-anchor="middle"
+          dominant-baseline="middle"
+          style="font-family: &quot;trebuchet ms&quot;, verdana, arial, sans-serif;; font-size: 12px">User
+    </text>
+</svg>

@@ -16,25 +16,14 @@ export type CreateBookingRequest = {
 };
 
 /**
- * Response when a user is added to the waiting list.
+ * Response when a booking is created.
  *
- * @property message - A message indicating the user was added to the waiting list.
- * @property wait - The booking that was added to the waiting list.
+ * @property message - A message indicating whether the ticket was created or the user was added to the waiting list.
+ * @property booking - The ticket that was created.
  */
-export type AddedToWaitingListResponse = {
+export type BookingCreatedResponse = {
     message: string;
-    wait: Booking;
-};
-
-/**
- * Response when a ticket is created.
- *
- * @property message - A message indicating the ticket was created.
- * @property ticket - The ticket that was created.
- */
-export type TicketCreatedResponse = {
-    message: string;
-    ticket: Booking;
+    booking: Booking;
 };
 
 /**

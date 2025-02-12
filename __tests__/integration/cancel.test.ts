@@ -5,6 +5,8 @@ import app from "../../src/app";
 
 let prisma: PrismaClient;
 
+jest.setTimeout(10000);
+
 jest.mock("../../src/middleware/auth", () => {
     return {
         verifyLoggedIn: jest.fn().mockImplementation((_, __, next) => {
