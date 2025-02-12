@@ -30,4 +30,4 @@ jobs:
         run: npm run test:unit
 
       - name: Run integration tests
-        run: npx jest --config jest.integration.config.js --coverage
+        run: npm run test:integration

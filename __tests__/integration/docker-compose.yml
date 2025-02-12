@@ -1,0 +1,10 @@
+services:
+  test-db:
+    image: postgres:alpine
+    container_name: ticket-booking-test-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: ticket-booking
+      POSTGRES_PASSWORD: abcd@123
+      POSTGRES_DB: ticket-booking

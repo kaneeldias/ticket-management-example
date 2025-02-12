@@ -8,7 +8,8 @@
         "dev": "nodemon src/server.ts",
         "start-db": "docker-compose up -d",
         "stop-db": "docker-compose down",
-        "init-db": "npx prisma db push && npx prisma generate && npx prisma db seed",
+        "init-db": "npx prisma db push init && npx prisma generate && npx prisma db seed",
+        "test": "jest",
         "test:unit": "jest --config jest.unit.config.js",
         "test:integration": "jest --config jest.integration.config.js",
         "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
@@ -21,11 +22,13 @@
     "license": "ISC",
     "dependencies": {
         "@prisma/client": "^6.3.1",
+        "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "joi": "^17.13.3"
     },
     "devDependencies": {
         "@types/express": "^5.0.0",
+        "@types/jest": "^29.5.14",
         "@types/node": "^22.13.1",
         "jest": "^29.7.0",
         "jest-mock-extended": "^4.0.0-beta1",
