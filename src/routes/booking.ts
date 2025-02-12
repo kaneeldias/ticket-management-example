@@ -54,16 +54,15 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
         const booking = await Booking.getById(cancelBookingRequest.id);
         const updatedTicket = await booking.cancel();
 
+        // Ideally this should be done as a background job
+        const event = await booking.getEvent();
+        await event.bumpWaitList();
+
         const response: BookingCancelledResponse = {
             message: "Booking cancelled successfully",
             booking: updatedTicket,
         };
         res.status(200).json(response);
-
-        // Bump the wait list after response is sent to the user
-        // Ideally this should be done in a background job
-        const event = await booking.getEvent();
-        await event.bumpWaitList();
 
         return;
     } catch (err) {

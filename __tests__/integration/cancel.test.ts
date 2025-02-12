@@ -140,9 +140,6 @@ describe("Testing POST /cancel", () => {
         expect(booking?.userId).toBe(userId1);
         expect(booking?.eventId).toBe(eventId);
 
-        //wait 2s to allow the server to bump the waiting list
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
         const booking2 = await prisma.booking.findUnique({
             where: { id: bookingId2 },
         });
@@ -189,9 +186,6 @@ describe("Testing POST /cancel", () => {
             expect(responseBody.booking.userId).toBe(originalUserIds[i]);
             expect(responseBody.booking.eventId).toBe(eventId);
         }
-
-        //wait 500ms to allow the server to bump the waiting list
-        await new Promise((resolve) => setTimeout(resolve, 500));
 
         for (let i = 0; i < 5; i++) {
             const booking = await prisma.booking.findUnique({
@@ -241,9 +235,6 @@ describe("Testing POST /cancel", () => {
             expect(responseBody.booking.userId).toBe(originalUserIds[i]);
             expect(responseBody.booking.eventId).toBe(eventId);
         }
-
-        //wait 500ms to allow the server to bump the waiting list
-        await new Promise((resolve) => setTimeout(resolve, 500));
 
         for (let i = 0; i < 10; i++) {
             const booking = await prisma.booking.findUnique({
