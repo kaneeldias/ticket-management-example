@@ -8,6 +8,7 @@ import { EventSoldOutError } from "../../src/errors/EventSoldOutError";
 import { EventNotFoundError } from "../../src/errors/EventNotFoundError";
 import { BookingAlreadyCancelledError } from "../../src/errors/BookingAlreadyCancelledError";
 import { BookingAlreadyConfirmedError } from "../../src/errors/BookingAlreadyConfirmedError";
+import { UserNotFoundError } from "../../src/errors/UserNotFoundError";
 
 jest.mock("@prisma/client", () => ({
     PrismaClient: jest.fn().mockImplementation(() => prisma),
@@ -86,6 +87,25 @@ describe("Booking model tests", () => {
 
         const booking = await Booking.getById(1);
         await expect(booking.getEvent()).rejects.toThrow(EventNotFoundError);
+    });
+
+    test("Get user associated with booking", async () => {
+        mockPrisma.booking.findUnique.mockResolvedValue(TEST_BOOKING_1);
+        mockPrisma.user.findUnique.mockResolvedValue(TEST_USER_1);
+
+        const booking = await Booking.getById(1);
+        const user = await booking.getUser();
+        expect(user).toBeInstanceOf(User);
+        expect(user.getId()).toBe(1);
+    });
+
+    test("Get user associated with booking which does not exist", async () => {
+        mockPrisma.booking.findUnique.mockResolvedValue(TEST_BOOKING_1);
+        mockPrisma.user.findUnique.mockResolvedValue(null);
+
+        const booking = await Booking.getById(1);
+        await expect(booking.getUser()).rejects.toThrow(UserNotFoundError);
+        await expect(booking.getUser()).rejects.toThrow("User with ID 1 not found");
     });
 
     test("Cancel booking", async () => {
