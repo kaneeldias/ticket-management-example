@@ -32,7 +32,7 @@ describe("Testing POST /book", () => {
     test("Create booking with valid data", async () => {
         const response = await request(app).post("/book").send({
             eventId: TEST_EVENT_1.id,
-            userId: TEST_USER_1,
+            userId: TEST_USER_1.id,
         });
 
         const body = response.body;

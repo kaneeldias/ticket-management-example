@@ -33,7 +33,7 @@ describe("Testing POST /initialize", () => {
             date: TEST_EVENT_1.date,
             location: TEST_EVENT_1.location,
             ticketLimit: TEST_EVENT_1.ticketLimit,
-            price: TEST_EVENT_1.pric,
+            price: TEST_EVENT_1.price,
         });
         expect(response.status).toBe(201);
 
