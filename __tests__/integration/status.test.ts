@@ -1,16 +1,16 @@
 import { TEST_EVENT_1 } from "../test-data";
 import { PrismaClient } from "@prisma/client";
 import { createTestBooking, createTestEvent, createTestUser, loadEnvVariables } from "./test-utils";
+import request from "supertest";
+import app from "../../src/app";
 
 let prisma: PrismaClient;
-let ENDPOINT: string;
 
 describe("Testing POST /status/:eventId", () => {
     beforeAll((done) => {
         jest.resetModules();
         loadEnvVariables(".env.test");
         prisma = new PrismaClient();
-        ENDPOINT = `http://localhost:${process.env.PORT}`;
         done();
     });
 
@@ -21,8 +21,8 @@ describe("Testing POST /status/:eventId", () => {
     test("Get event status with no bookings", async () => {
         const eventId = await createTestEvent();
 
-        const response = await fetch(`${ENDPOINT}/status/${eventId}`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/${eventId}`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.event.id).toBe(eventId);
@@ -35,8 +35,8 @@ describe("Testing POST /status/:eventId", () => {
         const userId = await createTestUser();
         await createTestBooking(userId, eventId);
 
-        const response = await fetch(`${ENDPOINT}/status/${eventId}`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/${eventId}`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.event.id).toBe(eventId);
@@ -51,8 +51,8 @@ describe("Testing POST /status/:eventId", () => {
             await createTestBooking(userId, eventId);
         }
 
-        const response = await fetch(`${ENDPOINT}/status/${eventId}`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/${eventId}`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.event.id).toBe(eventId);
@@ -67,8 +67,8 @@ describe("Testing POST /status/:eventId", () => {
             await createTestBooking(userId, eventId);
         }
 
-        const response = await fetch(`${ENDPOINT}/status/${eventId}`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/${eventId}`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.event.id).toBe(eventId);
@@ -88,8 +88,8 @@ describe("Testing POST /status/:eventId", () => {
             await createTestBooking(userId, eventId, "PENDING");
         }
 
-        const response = await fetch(`${ENDPOINT}/status/${eventId}`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/${eventId}`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.event.id).toBe(eventId);
@@ -98,16 +98,16 @@ describe("Testing POST /status/:eventId", () => {
     });
 
     test("Get event status with invalid event ID", async () => {
-        const response = await fetch(`${ENDPOINT}/status/invalid`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/invalid`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(400);
         expect(responseBody.error).toBe('"eventId" must be a number');
     });
 
     test("Get event status with non-existent event ID", async () => {
-        const response = await fetch(`${ENDPOINT}/status/1000`);
-        const responseBody = await response.json();
+        const response = await request(app).get(`/status/1000`).send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(404);
         expect(responseBody.error).toBe("Event with ID 1000 not found");

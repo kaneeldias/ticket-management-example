@@ -8,14 +8,12 @@ import { UserNotFoundError } from "../../errors/UserNotFoundError";
 export class User {
     private readonly id: number;
     private readonly email: string;
-    private readonly password: string;
     private readonly firstName: string;
     private readonly lastName: string;
 
-    private constructor(id: number, email: string, password: string, firstName: string, lastName: string) {
+    private constructor(id: number, email: string, firstName: string, lastName: string) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -37,7 +35,50 @@ export class User {
         if (!user) {
             throw new UserNotFoundError(id);
         }
-        return new User(user.id, user.email, user.password, user.firstName, user.lastName);
+        return new User(user.id, user.email, user.firstName, user.lastName);
+    }
+
+    /**
+     * Retrieves a user by their email
+     *
+     * @param email - The email of the user to be retrieved
+     * @returns The user with the specified email
+     */
+    //TODO: Add test cases
+    public static async getByEmail(email: string): Promise<User> {
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+                deletedAt: null,
+            },
+        });
+
+        if (!user) {
+            throw new UserNotFoundError(email);
+        }
+        return new User(user.id, user.email, user.firstName, user.lastName);
+    }
+
+    /**
+     * Validates the password of a user
+     *
+     * @param email - The email of the user
+     * @param password - The password to validate
+     */
+    //TODO: Add test cases
+    public static async validatePassword(email: string, password: string): Promise<boolean> {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email,
+                deletedAt: null,
+            },
+        });
+
+        if (!user) {
+            throw new UserNotFoundError(email);
+        }
+
+        return user.password === password;
     }
 
     /**
@@ -47,6 +88,15 @@ export class User {
      */
     public getId(): number {
         return this.id;
+    }
+
+    /**
+     * Retrieves the email of the user
+     *
+     * @returns The email of the user
+     */
+    public getEmail(): string {
+        return this.email;
     }
 
     /**

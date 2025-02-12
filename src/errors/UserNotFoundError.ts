@@ -12,8 +12,8 @@ export class UserNotFoundError extends EntityNotFoundError {
      *
      * @param {number} id The ID of the user
      */
-    constructor(id: number) {
+    constructor(id: number | string) {
         super("User", id);
-        this.name = "EventNotFoundError";
+        this.name = "UserNotFoundError";
     }
 }

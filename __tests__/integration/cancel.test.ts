@@ -1,15 +1,26 @@
 import { PrismaClient } from "@prisma/client";
 import { createTestBooking, createTestEvent, createTestUser, loadEnvVariables } from "./test-utils";
+import request from "supertest";
+import app from "../../src/app";
 
 let prisma: PrismaClient;
-let ENDPOINT: string;
+
+jest.mock("../../src/middleware/auth", () => {
+    return {
+        verifyLoggedIn: jest.fn().mockImplementation((_, __, next) => {
+            next();
+        }),
+        verifyLoggedInUser: jest.fn().mockImplementation((_, __) => {
+            return true;
+        }),
+    };
+});
 
 describe("Testing POST /cancel", () => {
     beforeAll((done) => {
         jest.resetModules();
         loadEnvVariables(".env.test");
         prisma = new PrismaClient();
-        ENDPOINT = `http://localhost:${process.env.PORT}`;
         done();
     });
 
@@ -22,14 +33,10 @@ describe("Testing POST /cancel", () => {
         const eventId = await createTestEvent();
         const bookingId = await createTestBooking(userId, eventId);
 
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookingId }),
+        const response = await request(app).post("/cancel").send({
+            id: bookingId,
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.message).toBe("Booking cancelled successfully");
@@ -48,14 +55,10 @@ describe("Testing POST /cancel", () => {
     });
 
     test("Cancel a booking that does not exist", async () => {
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: 9999 }),
+        const response = await request(app).post("/cancel").send({
+            id: 9999,
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(404);
         expect(responseBody.error).toBe("Booking with ID 9999 not found");
@@ -66,14 +69,10 @@ describe("Testing POST /cancel", () => {
         const eventId = await createTestEvent();
         const bookingId = await createTestBooking(userId, eventId, "CANCELLED");
 
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookingId }),
+        const response = await request(app).post("/cancel").send({
+            id: bookingId,
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(400);
         expect(responseBody.error).toBe(`Booking with ID ${bookingId} has already been cancelled`);
@@ -84,14 +83,10 @@ describe("Testing POST /cancel", () => {
         const eventId = await createTestEvent(10);
         const bookingId = await createTestBooking(userId, eventId, "PENDING");
 
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookingId }),
+        const response = await request(app).post("/cancel").send({
+            id: bookingId,
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.message).toBe("Booking cancelled successfully");
@@ -119,14 +114,10 @@ describe("Testing POST /cancel", () => {
         const userId2 = await createTestUser();
         const bookingId2 = await createTestBooking(userId2, eventId, "PENDING");
 
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: bookingId1 }),
+        const response = await request(app).post("/cancel").send({
+            id: bookingId1,
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(200);
         expect(responseBody.message).toBe("Booking cancelled successfully");
@@ -171,14 +162,10 @@ describe("Testing POST /cancel", () => {
         }
 
         for (let i = 0; i < 5; i++) {
-            const response = await fetch(`${ENDPOINT}/cancel`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id: originalBookingIds[i] }),
+            const response = await request(app).post("/cancel").send({
+                id: originalBookingIds[i],
             });
-            const responseBody = await response.json();
+            const responseBody = response.body;
 
             expect(response.status).toBe(200);
             expect(responseBody.message).toBe("Booking cancelled successfully");
@@ -220,14 +207,10 @@ describe("Testing POST /cancel", () => {
         }
 
         for (let i = 0; i < 5; i++) {
-            const response = await fetch(`${ENDPOINT}/cancel`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id: originalBookingIds[i] }),
+            const response = await request(app).post("/cancel").send({
+                id: originalBookingIds[i],
             });
-            const responseBody = await response.json();
+            const responseBody = response.body;
 
             expect(response.status).toBe(200);
             expect(responseBody.message).toBe("Booking cancelled successfully");
@@ -267,28 +250,19 @@ describe("Testing POST /cancel", () => {
         expect(pendingCount).toBe(5);
     });
 
-    test("Cancel booking request with empty request boyd", async () => {
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        const responseBody = await response.json();
+    test("Cancel booking request with empty request body", async () => {
+        const response = await request(app).post("/cancel").send();
+        const responseBody = response.body;
 
         expect(response.status).toBe(400);
         expect(responseBody.error).toBe('"id" is required');
     });
 
     test("Cancel booking request with empty booking ID", async () => {
-        const response = await fetch(`${ENDPOINT}/cancel`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: "" }),
+        const response = await request(app).post("/cancel").send({
+            id: "",
         });
-        const responseBody = await response.json();
+        const responseBody = response.body;
 
         expect(response.status).toBe(400);
         expect(responseBody.error).toBe('"id" must be a number');

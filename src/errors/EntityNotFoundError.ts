@@ -11,7 +11,7 @@ export class EntityNotFoundError extends Error {
      * @param {string} type The type of the entity
      * @param {number} id The ID of the entity that was not found
      */
-    constructor(type: string, id: number) {
+    constructor(type: string, id: number | string) {
         super(`${type} with ID ${id} not found`);
         this.name = "EventNotFoundError";
     }
