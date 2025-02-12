@@ -20,4 +20,4 @@ app.get("/status/:eventId", getEventStatus);
 //Error handling middleware
 app.use(errorHandler);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);

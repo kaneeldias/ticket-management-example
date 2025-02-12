@@ -18,6 +18,7 @@ async function populateUsers() {
             return { email, password, firstName, lastName };
         });
 
+    console.log("Inserting users...");
     USERS.shift();
     for (const user of USERS) {
         await prisma.user.upsert({
@@ -44,6 +45,7 @@ async function populateEvents() {
             return { name, description, date, location, ticketLimit, price };
         });
 
+    console.log("Inserting events...");
     EVENTS.shift();
     for (const event of EVENTS) {
         await prisma.event.create({

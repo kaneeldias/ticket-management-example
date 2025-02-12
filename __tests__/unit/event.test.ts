@@ -1,10 +1,10 @@
-import { MockPrismaClient, prisma } from "../__mocks__/prisma";
-import { PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1 } from "./test-data";
-import { Event } from "../src/models/event/Event";
-import { EventNotFoundError } from "../src/errors/EventNotFoundError";
-import { CreateEventRequest } from "../src/types/event";
+import { MockPrismaClient, prisma } from "./mocks/prisma";
+import { PENDING_BOOKING_1, TEST_BOOKING_1, TEST_EVENT_1 } from "../test-data";
+import { Event } from "../../src/models/event/Event";
+import { EventNotFoundError } from "../../src/errors/EventNotFoundError";
+import { CreateEventRequest } from "../../src/types/event";
 import { ValidationError } from "joi";
-import { Booking } from "../src/models/booking/Booking";
+import { Booking } from "../../src/models/booking/Booking";
 
 jest.mock("@prisma/client", () => ({
     PrismaClient: jest.fn().mockImplementation(() => prisma),

@@ -2,12 +2,12 @@ import Joi from "joi";
 import { CancelBookingRequest, CreateBookingRequest } from "../../types/booking";
 
 const createBookingSchema = Joi.object({
-    eventId: Joi.string().required(),
-    userId: Joi.string().required(),
+    eventId: Joi.number().integer().required(),
+    userId: Joi.number().integer().required(),
 });
 
 const cancelBookingSchema = Joi.object({
-    id: Joi.string().required(),
+    id: Joi.number().integer().required(),
 });
 
 /**
