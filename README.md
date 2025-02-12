@@ -49,7 +49,7 @@ that allows users to:
     - [6.8 Testing](#68-testing)
     - [6.9 Code Coverage](#69-code-coverage)
     - [6.10 Continuous Integration](#610-continuous-integration)
-    - [6.11 Authentication](#611-authentication)
+  - [6.11 Authentication](#611-authentication-and-authorization)
 - [7. API Documentation](#7-api-documentation)
     - [7.1 `POST /login`](#71-post-login-logs-in-a-user)
     - [7.2 `POST /initialize`](#72-post-initialize-creates-a-new-event)
