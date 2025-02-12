@@ -6,6 +6,9 @@ import EventEmitter from "node:events";
 import { UserAlreadyHasBookingError } from "../errors/UserAlreadyHasBookingError";
 import { UserAlreadyOnWaitListError } from "../errors/UserAlreadyOnWaitListError";
 
+/**
+ * A class that manages bookings for events ensuring thread safety and concurrency
+ */
 class BookingManager {
     private eventMutexes = new Map<number, Mutex>();
     private bookingMutexes = new Map<number, Mutex>();
@@ -17,6 +20,14 @@ class BookingManager {
         });
     }
 
+    /**
+     * Creates a booking for a user for an event.
+     * While a booking is being created, the event is locked to prevent unexpected behavior
+     *
+     * @param userId - The ID of the user
+     * @param eventId - The ID of the event
+     * @returns The created booking
+     */
     public async createBooking(userId: number, eventId: number): Promise<Booking> {
         await this.aquireEventMutex(eventId);
         try {
@@ -41,10 +52,21 @@ class BookingManager {
         }
     }
 
+    /**
+     * Cancels a booking for an event.
+     * While a booking is being cancelled, the booking is locked to prevent unexpected behavior,
+     * and the event is locked to ensure that the waitlist is updated correctly
+     *
+     * @param bookingId - The ID of the booking to cancel
+     * @returns The cancelled booking
+     */
     public async cancelBooking(bookingId: number): Promise<Booking> {
+        const booking = await Booking.getById(bookingId);
+        const event = await booking.getEvent();
+
+        await this.aquireEventMutex(event.getId());
         await this.aquireBookingMutex(bookingId);
         try {
-            const booking = await Booking.getById(bookingId);
             const cancelledBooking = await booking.cancel();
 
             const associatedEvent = await booking.getEvent();
@@ -55,9 +77,16 @@ class BookingManager {
             return cancelledBooking;
         } finally {
             await this.releaseBookingMutex(bookingId);
+            await this.releaseEventMutex(event.getId());
         }
     }
 
+    /**
+     * Bumps the first user on the waitlist for an event to a confirmed booking. During this process,
+     * the event as well as the booking is locked to prevent unexpected behavior
+     *
+     * @param eventId - The ID of the event
+     */
     private async bumpWaitlist(eventId: number): Promise<void> {
         await this.aquireEventMutex(eventId);
         try {
