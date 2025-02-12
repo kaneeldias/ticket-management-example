@@ -5,12 +5,16 @@ import { ErrorLog, InfoLog, RequestLog, ResponseLog } from "../types/Log";
  * Class to log requests, responses, errors, and info messages
  */
 export class Logger {
+    private static ENABLE_LOGGING = process.env.ENABLE_LOGGING ? process.env.ENABLE_LOGGING === "true" : true;
+
     /**
      * Logs a request
      *
      * @param req - The request object
      */
     public static logRequest(req: Request) {
+        if (!Logger.ENABLE_LOGGING) return;
+
         const requestUUID = req.headers["x-request-id"] as string;
         const start = Date.now();
         const ipAddress = req.ip;
@@ -24,7 +28,7 @@ export class Logger {
             url: req.url,
             body: req.body,
         };
-        // console.log(JSON.stringify(requestLog));
+        console.log(JSON.stringify(requestLog));
     }
 
     /**
@@ -36,6 +40,8 @@ export class Logger {
      * @param responseBody - The body of the response
      */
     public static logResponse(req: Request, res: Response, duration: number, responseBody: string) {
+        if (!Logger.ENABLE_LOGGING) return;
+
         const requestUUID = req.headers["x-request-id"] as string;
         const end = Date.now();
 
@@ -47,7 +53,7 @@ export class Logger {
             statusCode: res.statusCode,
             body: responseBody,
         };
-        // console.log(JSON.stringify(responseLog));
+        console.log(JSON.stringify(responseLog));
     }
 
     /**
@@ -57,6 +63,8 @@ export class Logger {
      * @param error - The error to be logged
      */
     public static logError(req: Request, error: Error): void {
+        if (!Logger.ENABLE_LOGGING) return;
+
         const errorLog: ErrorLog = {
             timestamp: getTimestamp(Date.now()),
             requestUUID: req.headers["x-request-id"] as string,
@@ -74,6 +82,8 @@ export class Logger {
      * @param message - The info message
      */
     public static logInfo(req: Request, message: string): void {
+        if (!Logger.ENABLE_LOGGING) return;
+
         const infoLog: InfoLog = {
             timestamp: getTimestamp(Date.now()),
             requestUUID: req.headers["x-request-id"] as string,
