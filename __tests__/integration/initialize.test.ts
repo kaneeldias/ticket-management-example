@@ -6,15 +6,16 @@ let prisma: PrismaClient;
 let ENDPOINT: string;
 
 describe("Testing POST /initialize", () => {
-    beforeAll(() => {
+    beforeAll((done) => {
         jest.resetModules();
         loadEnvVariables(".env.test");
         prisma = new PrismaClient();
         ENDPOINT = `http://localhost:${process.env.PORT}`;
+        done();
     });
 
-    afterAll(async () => {
-        await prisma.$disconnect();
+    afterAll((done) => {
+        prisma.$disconnect().finally(done());
     });
 
     test("Creating a new event", async () => {
