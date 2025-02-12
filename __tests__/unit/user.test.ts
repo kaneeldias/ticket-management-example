@@ -73,4 +73,19 @@ describe("User model tests", () => {
         const isOnWaitList = await user.isOnWaitList(event);
         expect(isOnWaitList).toBe(false);
     });
+
+    test("Get user by email which exists", async () => {
+        mockPrisma.user.findUnique.mockResolvedValue(TEST_USER_1);
+
+        const user = await User.getByEmail(TEST_USER_1.email);
+        expect(user).toBeInstanceOf(User);
+        expect(user.getId()).toBe(1);
+    });
+
+    test("Get user by email which does not exist", async () => {
+        mockPrisma.user.findUnique.mockResolvedValue(null);
+
+        await expect(User.getByEmail("dne@gmail.com")).rejects.toThrow(UserNotFoundError);
+        await expect(User.getByEmail("dne@gmail.com")).rejects.toThrow("User with email dne@gmail.com not found");
+    });
 });

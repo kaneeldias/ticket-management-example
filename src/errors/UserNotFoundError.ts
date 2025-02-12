@@ -13,7 +13,7 @@ export class UserNotFoundError extends EntityNotFoundError {
      * @param {number} id The ID of the user
      */
     constructor(id: number | string) {
-        super("User", id);
+        super("User", id, "email");
         this.name = "UserNotFoundError";
     }
 }
