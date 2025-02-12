@@ -158,7 +158,7 @@ npx prisma generate
 Run the following command to create the required tables in your database:
 
 ```bash
-npx prisma migrate dev --init
+npx prisma migrate dev --name init
 ```
 
 #### 5.2.7 Seed the database with example data (optional)
@@ -174,7 +174,7 @@ npx prisma db seed
 Run the tests to ensure that everything is working as expected:
 
 ```bash
-jest
+npx jest
 ```
 
 #### 5.2.9 Start the server
@@ -486,7 +486,7 @@ Example request body:
 
 ```json
 {
-  "name": "New Year's Eve Party",
+  "name": "New Years Eve Party",
   "description": "A night of fun and games",
   "date": "2021-12-31",
   "location": "Colombo",
@@ -502,7 +502,7 @@ curl -X POST http://localhost:3000/initialize \
   -H "Content-Type: application/json" \
   -H "Authorization: <token>" \
   -d '{
-    "name": "New Year\'s Eve Party",
+    "name": "New Years Eve Party",
     "description": "A night of fun and games",
     "date": "2021-12-31",
     "location": "Colombo",
@@ -647,7 +647,7 @@ curl -X POST http://localhost:3000/cancel \
   -H "Content-Type: application/json" \
   -H "Authorization: <token>"
     -d '{
-        "eventId": 1
+        "id": 1
     }'
 ```
 
