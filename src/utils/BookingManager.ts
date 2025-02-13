@@ -29,7 +29,7 @@ class BookingManager {
      * @returns The created booking
      */
     public async createBooking(userId: number, eventId: number): Promise<Booking> {
-        await this.aquireEventMutex(eventId);
+        await this.acquireEventMutex(eventId);
         try {
             const user = await User.getById(userId);
             const event = await Event.getById(eventId);
@@ -64,8 +64,8 @@ class BookingManager {
         const booking = await Booking.getById(bookingId);
         const event = await booking.getEvent();
 
-        await this.aquireEventMutex(event.getId());
-        await this.aquireBookingMutex(bookingId);
+        await this.acquireEventMutex(event.getId());
+        await this.acquireBookingMutex(bookingId);
         try {
             const cancelledBooking = await booking.cancel();
 
@@ -88,14 +88,14 @@ class BookingManager {
      * @param eventId - The ID of the event
      */
     private async bumpWaitlist(eventId: number): Promise<void> {
-        await this.aquireEventMutex(eventId);
+        await this.acquireEventMutex(eventId);
         try {
             const event = await Event.getById(eventId);
             if (await event.isSoldOut()) return;
 
             const firstOnWaitlist = await Booking.getFirstOnWaitList(event);
             if (firstOnWaitlist) {
-                await this.aquireBookingMutex(firstOnWaitlist.getId());
+                await this.acquireBookingMutex(firstOnWaitlist.getId());
                 await firstOnWaitlist.upgrade();
                 await this.releaseBookingMutex(firstOnWaitlist.getId());
             }
@@ -113,7 +113,7 @@ class BookingManager {
         return mutex;
     }
 
-    private async aquireEventMutex(eventId: number): Promise<void> {
+    private async acquireEventMutex(eventId: number): Promise<void> {
         const mutex = this.getEventMutex(eventId);
         await mutex.acquire();
     }
@@ -132,7 +132,7 @@ class BookingManager {
         return mutex;
     }
 
-    private async aquireBookingMutex(bookingId: number): Promise<void> {
+    private async acquireBookingMutex(bookingId: number): Promise<void> {
         const mutex = this.getBookingMutex(bookingId);
         await mutex.acquire();
     }
