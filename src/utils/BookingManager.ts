@@ -61,11 +61,12 @@ class BookingManager {
      * @returns The cancelled booking
      */
     public async cancelBooking(bookingId: number): Promise<Booking> {
+        await this.acquireBookingMutex(bookingId);
+
         const booking = await Booking.getById(bookingId);
         const event = await booking.getEvent();
 
         await this.acquireEventMutex(event.getId());
-        await this.acquireBookingMutex(bookingId);
         try {
             const cancelledBooking = await booking.cancel();
 
@@ -76,8 +77,8 @@ class BookingManager {
 
             return cancelledBooking;
         } finally {
-            await this.releaseBookingMutex(bookingId);
             await this.releaseEventMutex(event.getId());
+            await this.releaseBookingMutex(bookingId);
         }
     }
 
@@ -106,7 +107,7 @@ class BookingManager {
 
     private getEventMutex(eventId: number): Mutex {
         if (this.eventMutexes.has(eventId)) {
-            this.eventMutexes.get(eventId);
+            return this.eventMutexes.get(eventId)!;
         }
         const mutex = new Mutex();
         this.eventMutexes.set(eventId, mutex);
@@ -125,7 +126,7 @@ class BookingManager {
 
     private getBookingMutex(bookingId: number): Mutex {
         if (this.bookingMutexes.has(bookingId)) {
-            this.bookingMutexes.get(bookingId);
+            return this.bookingMutexes.get(bookingId)!;
         }
         const mutex = new Mutex();
         this.bookingMutexes.set(bookingId, mutex);
