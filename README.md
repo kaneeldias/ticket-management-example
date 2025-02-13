@@ -8,9 +8,8 @@ Last Updated: 2025-02-13
 
 ## 1. Introduction
 
-This project is a simple example of a ticket management system. It is a RESTful API developed using Express
-that allows users to:
-
+This project is a simple example of a ticket management system. It is a RESTful API developed using Express,
+which allows users to:
 * Create events
 * Create bookings for events
     * If an event is sold out, the user will be added to a waiting list
@@ -18,6 +17,9 @@ that allows users to:
     * Once a booking is cancelled, the next person in the waiting list will be automatically booked
 * View the details and status of events
     * Including the number of tickets available and the number of people in the waiting list
+
+All these operations are managed concurrently and safely using a [`BookingManager`](./src/utils/BookingManager.ts) class
+that ensures that the system is always in a consistent state and avoids race conditions.
 
 ## 2. Content
 
@@ -74,8 +76,7 @@ In addition to the basic functionalities listed above, this project also include
 * **Concurrency control** via the [`BookingManager`](./src/utils/BookingManager.ts) which ensures thread safety when
   creating and cancelling bookings ensuring that the system is always in a consistent state and avoiding race conditions
 * A **user authentication system** that allows users to log in and be provided with a JWT token that can be used to
-  access
-  specific resources of the API
+  access specific resources of the API
 * Comprehensive **logging** of requests and errors via the [`Logger`](./src/utils/Logger.ts) class
 * Comprehensive error handling using **custom error classes** and **middleware**
 * Comprehensive testing using Jest with over 97% code coverage
@@ -92,7 +93,7 @@ In addition to the basic functionalities listed above, this project also include
 ### 5.1 Prerequisites
 
 * Git (to clone the repository)
-* NodeJS (this project was developed using v20.15.0)
+* Node.js (this project was developed using v20.15.0)
 * Docker (optional, for running the PostgreSQL database)
 * A PostgreSQL database (optional, if you are not using Docker)
 
@@ -101,7 +102,6 @@ In addition to the basic functionalities listed above, this project also include
 #### 5.2.1 Clone the repository
 
 Clone this repository to your local machine using the following command:
-
 ```bash
 git clone https://github.com/kaneeldias/ticket-management-example.git
 ```
@@ -109,7 +109,6 @@ git clone https://github.com/kaneeldias/ticket-management-example.git
 #### 5.2.2 Install dependencies
 
 Navigate to the project directory and install the required dependencies using the following command:
-
 ```bash
 npm install
 ```
@@ -118,7 +117,6 @@ npm install
 
 If you are using Docker, you can run the following command from the project root directory to start a PostgreSQL
 database container:
-
 ```bash
 docker compose up -d
 ```
@@ -132,13 +130,11 @@ If you are not using Docker, you can set up a PostgreSQL database on your local 
 #### 5.2.4 Set up the environment variables
 
 Create a `.env` file in the project root directory and add the following environment variables:
-
 * `PORT` - the port on which you want the API server to be running
 * `DATABASE_URL` - the connection string for your PostgreSQL database
 * `JWT_SECRET` - a secret key to be used for signing JWT tokens
 
 Example .env file:
-
 ```dotenv
 PORT=3000
 DATABASE_URL=postgresql://ticket-booking:abcd@123@localhost:5432/ticket-booking?schema=public
@@ -148,7 +144,6 @@ JWT_SECRET=THIS_IS_AN_EXAMPLE_SECRET
 #### 5.2.5 Generate the Prisma client
 
 Run the following command to generate the Prisma client:
-
 ```bash
 npx prisma generate
 ```
@@ -156,7 +151,6 @@ npx prisma generate
 #### 5.2.6 Run the migrations
 
 Run the following command to create the required tables in your database:
-
 ```bash
 npx prisma migrate dev --name init
 ```
@@ -164,7 +158,6 @@ npx prisma migrate dev --name init
 #### 5.2.7 Seed the database with example data (optional)
 
 Run the following command to seed the database with example data:
-
 ```bash
 npx prisma db seed
 ```
@@ -172,7 +165,6 @@ npx prisma db seed
 #### 5.2.8 Run the tests (optional)
 
 Run the tests to ensure that everything is working as expected:
-
 ```bash
 npx jest
 ```
@@ -180,7 +172,6 @@ npx jest
 #### 5.2.9 Start the server
 
 Run the following command to start the API server:
-
 ```bash
 npm start
 ```
@@ -202,16 +193,14 @@ To access the protected endpoints, you will need to provide a JWT token in the `
 JWT token through the [`POST /login`](#71-post-login-logs-in-a-user) endpoint.
 
 You can use the following credentials to log in as a sample user:
-
 ```
 email: kaneeldias@gmail.com
 password: abcd@123
 ```
 
-This are the credentials for the seed user with the ID 1
+These are the credentials for the seed user with the ID 1
 
-cURL request to login and get a JWT token:
-
+cURL request to log in and get a JWT token:
 ```bash
 curl -X POST http://localhost:3000/login \
 -H "Content-Type: application/json" \
@@ -225,22 +214,20 @@ curl -X POST http://localhost:3000/login \
 
 ### 6.1 Database schema
 
-The schema for the database can be found in the [`schema.prism`](./prisma/schema.prisma) file in the `prisma` directory.
+The schema for the database can be found in the [`schema.prisma`](./prisma/schema.prisma) file in the `prisma`
+directory.
 
 The schema includes the following tables:
-
 - `User` - Stores information about users
 - `Event` - Stores information about events
 - `Booking` - Stores information about bookings
 
 A `Booking` can have one of the following statuses:
-
 - `CONFIRMED` - The booking is confirmed
 - `PENDING` - The booking is pending (the event is sold out and the user is added to the waiting list)
 - `CANCELLED` - The booking has been cancelled
 
 The schema also includes relationships between the tables:
-
 - A `User` can have multiple bookings
 - An `Event` can have multiple bookings
 - A `Booking` is associated with a user and an event
@@ -251,7 +238,6 @@ The schema also includes relationships between the tables:
 
 The models for the database tables can be found in the [`models`](./src/models) directory. Each model corresponds to a
 table in the database and includes methods for interacting with the database.
-
 - [`User.ts`](./src/models/User.ts) - Represents the `User` table
 - [`Event.ts`](./src/models/Event.ts) - Represents the `Event` table
 - [`Booking.ts`](./src/models/Booking.ts) - Represents the `Booking` table
@@ -267,7 +253,6 @@ that the system is always in a consistent state by handling concurrency issues w
 This is achieved through the use of mutexes provided by the `async-mutex` package.
 
 There are individual mutexes for each event and booking which are stored in `Map` objects.
-
 ```typescript
 import { Mutex } from "async-mutex";
 
@@ -278,7 +263,6 @@ private bookingMutexes = new Map<number, Mutex>();
 When a user attempts to book a ticket for an event, the [`BookingManager`](./src/utils/BookingManager.ts) acquires a
 lock on the event to prevent other users from booking tickets for the same event at the same time. Once the booking is
 complete, the lock is released.
-
 ```typescript
 //BookingManager Class
 public async createBooking(userId: number, eventId: number): Promise<Booking> {
@@ -294,15 +278,10 @@ public async createBooking(userId: number, eventId: number): Promise<Booking> {
 Similarly, when a user attempts to cancel a booking, the [`BookingManager`](./src/utils/BookingManager.ts) acquires a
 lock on the booking to prevent other users from cancelling the same booking at the same time. Once the cancellation is
 complete, the lock is released.
-
 ```typescript
 //BookingManager Class
 public async
-cancelBooking(bookingId
-:
-number
-):
-Promise < Booking > {
+cancelBooking(bookingId: number):Promise <Booking> {
     const booking = await Booking.getById(bookingId);
     const event = await booking.getEvent();
     
@@ -321,7 +300,6 @@ Promise < Booking > {
 
 The [`BookingManager`](./src/utils/BookingManager.ts) class also uses an event emitter to notify when a booking is or
 cancelled. This emit is picked up by the same class to automatically book the next person in the waiting list.
-
 ```typescript
 //Emitter
 this.waitlistHandler.emit("trigger-waitlist-bump", {
@@ -343,14 +321,13 @@ specified time frame.
 ### 6.6 Error Handling
 
 The API uses [custom error classes](./src/errors) and middleware to handle errors.
-The [`ErrorHandler`](./src/middleware/error-handler.ts) middleware class is responsible for catching errors and
-returning
-appropriate responses to the client.
+
+The [`error-handler`](./src/middleware/error-handler.ts) middleware is responsible for catching errors and
+returning appropriate responses to the client.
 
 The error handler catches expected errors such as validation errors and unauthorized access errors and returns the
-appropriate
-HTTP status code and error message. If the error is unexpected, the error handler returns a generic error message and a
-500 status code.
+appropriate HTTP status code and error message. If the error is unexpected, the error handler returns a generic error
+message and a 500 status code.
 
 ### 6.7 Logging
 
@@ -370,9 +347,8 @@ The API has comprehensive test coverage using Jest. The tests can be found in th
 The tests include unit tests for most classes and functions and integration tests for all endpoints.
 
 The tests can be run using the following command:
-
 ```bash
-jest
+npx jest
 ```
 
 The test cases make use of mocking to mock external dependencies such as the database and the `prisma` client.
@@ -383,7 +359,6 @@ database. This ensures that the tests are run against a consistent environment a
 each test run.
 
 ### 6.9 Code Coverage
-
 [![codecov](https://codecov.io/gh/kaneeldias/ticket-management-example/graph/badge.svg?token=7eoUkqqaOf)](https://codecov.io/gh/kaneeldias/ticket-management-example)
 
 This project uses codecov to track code coverage. The code coverage report can be
@@ -398,11 +373,10 @@ The code coverage report shows that the project has over 97% code coverage, with
 
 ### 6.10 Continuous Integration
 
-This project uses GitHub Actions for continuous integration. The CI workflow can be found in
-the [`.github/workflows/pull-request.yaml`](./.github/workflows/pull-request.yaml) file.
+This project uses GitHub Actions for continuous integration. The CI workflow can be found in the
+[`.github/workflows/pull-request.yaml`](./.github/workflows/pull-request.yaml) file.
 
 The CI workflow runs the following steps on every pull request:
-
 - Installs Node.js
 - Installs dependencies
 - Builds the project
@@ -429,21 +403,18 @@ email address.
 Logs in a user and returns a JWT token that can be used to access protected endpoints.
 
 Request body:
-
-- `username` (string) - The username of the user
+- `email` (string) - The email address of the user
 - `password` (string) - The password of the user
 
 Example request body:
-
 ```json
 {
-  "username": "user1",
+  "email": "email@test.com",
   "password": "password"
 }
 ```
 
 Example cURL request:
-
 ```bash
 curl -X POST http://localhost:3000/login \
 -H "Content-Type: application/json" \
@@ -454,11 +425,9 @@ curl -X POST http://localhost:3000/login \
 ````
 
 Response body:
-
 - `token` (string) - The JWT token that can be used to access protected endpoints
 
 Example response body:
-
 ```json
 {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJrYW5lZWxkaWFzQGdtYWlsLmNvbSIsImlhdCI6MTczOTM5NjMwNCwiZXhwIjoxNzM5Mzk5OTA0fQ.GoIkaXl3QN5rAE3ynyrq5GuXDCFLu5JIlLordOrl7So"
@@ -470,11 +439,9 @@ Example response body:
 Creates a new event with the specified details.
 
 Headers:
-
 - `Authorization` - A JWT token that is required to access this endpoint
 
 Request body:
-
 - `name` (string) - The name of the event
 - `description` (string) - A description of the event
 - `date` (string) - The date of the event in the format `YYYY-MM-DD`
@@ -483,12 +450,11 @@ Request body:
 - `price` (float) - The price of each ticket
 
 Example request body:
-
 ```json
 {
-  "name": "New Years Eve Party",
+  "name": "Game Night",
   "description": "A night of fun and games",
-  "date": "2021-12-31",
+  "date": "2025-02-13",
   "location": "Colombo",
   "ticketLimit": 1,
   "price": 1000
@@ -496,15 +462,14 @@ Example request body:
 ```
 
 Example cURL request:
-
 ```bash
 curl -X POST http://localhost:3000/initialize \
   -H "Content-Type: application/json" \
   -H "Authorization: <token>" \
   -d '{
-    "name": "New Years Eve Party",
+    "name": "Game Night",
     "description": "A night of fun and games",
-    "date": "2021-12-31",
+    "date": "2025-02-13",
     "location": "Colombo",
     "ticketLimit": 1,
     "price": 1000
@@ -512,7 +477,6 @@ curl -X POST http://localhost:3000/initialize \
 ```
 
 Response body:
-
 - message (string) - A message indicating that the event was created successfully
 - event (object) - The details of the event that was created
     - event.id (integer) - The ID of the event
@@ -524,15 +488,14 @@ Response body:
     - event.price (float) - The price of each ticket
 
 Example response body:
-
 ```json
 {
   "message": "Event created successfully",
   "event": {
     "id": 1,
-    "name": "New Year's Eve Party",
+    "name": "Game Night",
     "description": "A night of fun and games",
-    "date": "2021-12-31",
+    "date": "2025-02-13",
     "location": "Colombo",
     "ticketLimit": 1,
     "price": 1000
@@ -546,19 +509,16 @@ Creates a new booking for an event for the specified user.
 
 - If the event is sold out, the user will be added to the waiting list.
 - If the user is already booked for the event (or in the waiting list), an error will be returned.
-- If the user is now authorized to book a ticket for the provided `userId`, an error will be returned.
+- If the user is not authorized to book a ticket for the provided `userId`, an error will be returned.
 
 Headers:
-
 - `Authorization` - A JWT token that is required to access this endpoint
 
 Request body:
-
 - `eventId` (integer) - The ID of the event for which the booking is being made
 - `userId` (integer) - The ID of the user making the booking
 
 Example request body:
-
 ```json
 {
   "eventId": 1,
@@ -567,7 +527,6 @@ Example request body:
 ```
 
 Example cURL request:
-
 ```bash
 curl -X POST http://localhost:3000/book \
   -H "Content-Type: application/json" \
@@ -579,7 +538,6 @@ curl -X POST http://localhost:3000/book \
 ```
 
 Response body:
-
 - `message` (string) - A message indicating that the booking was created successfully
 - `booking` (object) - The details of the booking that was created
     - `booking.id` (integer) - The ID of the booking
@@ -588,10 +546,9 @@ Response body:
     - `booking.status` (string) - The status of the booking (`CONFIRMED` or `WAITING`)
 
 Example response body:
-
 ```json
 {
-  "message": "Ticket booked successfully successfully",
+  "message": "Ticket booked successfully",
   "booking": {
     "id": 1,
     "eventId": 1,
@@ -602,7 +559,6 @@ Example response body:
 ```
 
 If the user was added to the wait list
-
 ```json
 {
   "message": "Event is sold out. User added to wait list",
@@ -617,31 +573,27 @@ If the user was added to the wait list
 
 ### 7.4 `POST /cancel` Cancels a booking
 
-Cancels a booking for an event for the specified user.
-
+Cancels the specified booking.
 - If the user is not booked for the event, an error will be returned.
 - If the user does not have a booking for the event, an error will be returned.
 - If the user does not have the authorization to cancel the booking, an error will be returned.
 - Upon the successful cancellation of a booking, the next person in the waiting list will be automatically booked.
 
 Headers:
-
 - `Authorization` - A JWT token that is required to access this endpoint
 
 Request body:
 
-- `eventId` (integer) - The ID of the event for which the booking is being cancelled
+- `id` (integer) - The ID of the event for which the booking is being cancelled
 
 Example request body:
-
 ```json
 {
-  "eventId": 1
+  "id": 1
 }
 ```
 
 Example cURL request:
-
 ```bash
 curl -X POST http://localhost:3000/cancel \
   -H "Content-Type: application/json" \
@@ -652,7 +604,6 @@ curl -X POST http://localhost:3000/cancel \
 ```
 
 Response body:
-
 - `message` (string) - A message indicating that the booking was cancelled successfully
 - `booking` (object) - The details of the booking that was cancelled
     - `booking.id` (integer) - The ID of the booking
@@ -661,7 +612,6 @@ Response body:
     - `booking.status` (string) - The status of the booking (`CANCELLED`)
 
 Example response body:
-
 ```json
 {
   "message": "Booking cancelled successfully",
@@ -679,21 +629,17 @@ Example response body:
 Gets the details of an event and the status of the bookings for that event.
 
 Headers:
-
 - `Authorization` - A JWT token that is required to access this endpoint
 
 Request parameters:
-
 - `id` (integer) - The ID of the event for which the details are being requested
 
 Example cURL request:
-
 ```bash
 curl -X GET http://localhost:3000/status/1
 ```
 
 Response body:
-
 - `event` (object) - The details of the event
     - `event.id` (integer) - The ID of the event
     - `event.name` (string) - The name of the event
@@ -706,7 +652,6 @@ Response body:
 - `waitingListCount` (integer) - The number of people in the waiting list for the event
 
 Example response body:
-
 ```json
 {
   "event": {
